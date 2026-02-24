@@ -1,16 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;500;700&family=Unbounded:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #f7f7f4;
   --foreground: #141417;
   --surface: #ffffff;
+  --surface-soft: rgba(255, 255, 255, 0.78);
+  --muted: #56565d;
+  --border: #e3e4e8;
+  --header-bg: rgba(247, 247, 244, 0.85);
+  --focus-ring: #18181b;
+  --selection-bg: #18181b;
+  --selection-fg: #fafafa;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark {
+  --background: #0f1115;
+  --foreground: #f2f3f5;
+  --surface: #171a21;
+  --surface-soft: rgba(23, 26, 33, 0.82);
+  --muted: #b0b3bc;
+  --border: #2d3340;
+  --header-bg: rgba(15, 17, 21, 0.82);
+  --focus-ring: #f2f3f5;
+  --selection-bg: #f2f3f5;
+  --selection-fg: #111319;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Avenir Next", "SF Pro Display", "Segoe UI", "Helvetica Neue", sans-serif;
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --font-sans: "LXGW WenKai TC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  --font-display: "Unbounded", "Avenir Next Condensed", "Trebuchet MS", "Segoe UI", sans-serif;
 }
 
 * {
@@ -23,29 +50,39 @@ body {
   padding: 0;
 }
 
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Avenir Next", "SF Pro Display", "Segoe UI", "Helvetica Neue", sans-serif;
+  font-family: "LXGW WenKai TC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
   text-rendering: optimizeLegibility;
+  transition: background-color 260ms var(--ease-out), color 260ms var(--ease-out);
+}
+
+.font-display {
+  font-family: "Unbounded", "Avenir Next Condensed", "Trebuchet MS", "Segoe UI", sans-serif;
 }
 
 a {
   text-decoration: none;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 :focus-visible {
-  outline: 2px solid #18181b;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: #18181b;
-  color: #fafafa;
+  background: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
 section[id] {
@@ -69,6 +106,14 @@ section[id] {
 .hero-glow-bottom {
   bottom: -78px;
   background: radial-gradient(circle at 82% 60%, rgba(90, 146, 157, 0.3) 0%, rgba(210, 191, 163, 0.24) 48%, rgba(247, 247, 244, 0) 74%);
+}
+
+.dark .hero-glow-top {
+  background: radial-gradient(circle at 12% 10%, rgba(33, 93, 121, 0.34) 0%, rgba(72, 116, 93, 0.22) 45%, rgba(15, 17, 21, 0) 72%);
+}
+
+.dark .hero-glow-bottom {
+  background: radial-gradient(circle at 82% 60%, rgba(94, 75, 133, 0.28) 0%, rgba(41, 89, 118, 0.2) 48%, rgba(15, 17, 21, 0) 74%);
 }
 
 .fade-up {

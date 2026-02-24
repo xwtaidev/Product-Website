@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ThemeToggle from "@/components/theme-toggle";
 import { projects } from "@/lib/projects";
 
 const navItems = [
@@ -62,10 +63,10 @@ const headline = [
 
 export default function Home() {
   return (
-    <div className="min-h-[100dvh] bg-background text-zinc-950">
+    <div className="min-h-[100dvh] bg-background text-zinc-950 dark:text-zinc-100">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-zinc-900 focus:px-3 focus:py-2 focus:text-sm focus:text-white"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-zinc-900 focus:px-3 focus:py-2 focus:text-sm focus:text-white dark:focus:bg-zinc-100 dark:focus:text-zinc-950"
       >
         Skip to main content
       </a>
@@ -75,39 +76,42 @@ export default function Home() {
         <div className="hero-glow hero-glow-bottom" />
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[#f7f7f4]/85 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[var(--header-bg)] backdrop-blur-md dark:border-zinc-800/80">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <a href="#" className="text-sm font-semibold tracking-[0.2em] uppercase">
+          <a href="#" className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-zinc-950 dark:text-zinc-100">
             YOURNAME.
           </a>
-          <nav
-            aria-label="Main navigation"
-            className="flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5"
-          >
-            {navItems.map((item) => (
-              <a key={item.label} href={item.href} className="transition hover:text-zinc-950">
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <nav
+              aria-label="Main navigation"
+              className="flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5 dark:text-zinc-400"
+            >
+              {navItems.map((item) => (
+                <a key={item.label} href={item.href} className="transition hover:text-zinc-950 dark:hover:text-zinc-100">
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+            <ThemeToggle className="ml-2 sm:ml-3" />
+          </div>
         </div>
       </header>
 
       <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
-          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600">Product Designer & Frontend Builder</p>
-          <div className="mt-5 space-y-1 text-zinc-950">
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Product Designer & Frontend Builder</p>
+          <div className="mt-5 space-y-1 text-zinc-950 dark:text-zinc-100">
             {headline.map((line) => (
               <h1
                 key={line}
-                className="text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl"
+                className="font-display text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl"
               >
                 {line}
               </h1>
             ))}
           </div>
 
-          <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600">
+          <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
             我把产品策略、体验设计和前端实现放在同一条链路里推进，聚焦核心路径的用户价值和业务结果。下面是近期的代表项目、服务范围与协作方式。
           </p>
 
@@ -118,7 +122,7 @@ export default function Home() {
                 href={link.href}
                 target={link.href.startsWith("http") ? "_blank" : undefined}
                 rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                className="rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950"
+                className="rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
               >
                 {link.label}
               </a>
@@ -128,8 +132,8 @@ export default function Home() {
 
         <section id="work" className="mt-20 fade-up" aria-label="Work">
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
-            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500">{projects.length} selected projects</span>
+            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
+            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -139,7 +143,7 @@ export default function Home() {
                   <div
                     className={`relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 ${
                       index === 0 ? "aspect-[16/8]" : "aspect-[4/3]"
-                    }`}
+                    } dark:border-zinc-800`}
                   >
                     <Image
                       src={project.coverImage}
@@ -163,23 +167,23 @@ export default function Home() {
                   </div>
                 </Link>
 
-                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600">{project.summary}</p>
+                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
               </article>
             ))}
           </div>
         </section>
 
         <section id="services" className="mt-20 fade-up">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Services.</h2>
+          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Services.</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {services.map((service, index) => (
               <article
                 key={service.title}
-                className="rounded-2xl border border-zinc-200 bg-white/80 p-6 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] hover:border-zinc-400"
+                className="rounded-2xl border border-zinc-200 bg-white/80 p-6 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900/70 dark:hover:border-zinc-600"
               >
-                <p className="text-xs tracking-[0.12em] uppercase text-zinc-500">{String(index + 1).padStart(2, "0")}</p>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950">{service.title}</h3>
-                <p className="mt-3 text-base leading-7 text-zinc-600">{service.description}</p>
+                <p className="text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">{String(index + 1).padStart(2, "0")}</p>
+                <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100">{service.title}</h3>
+                <p className="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">{service.description}</p>
               </article>
             ))}
           </div>
@@ -188,37 +192,37 @@ export default function Home() {
         <section id="about" className="mt-20 fade-up">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.35fr_1fr]">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">About.</h2>
-              <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 sm:text-2xl sm:leading-10">
+              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">About.</h2>
+              <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 dark:text-zinc-300 sm:text-2xl sm:leading-10">
                 我关注复杂产品中的核心交互路径，擅长把模糊需求转成可验证的设计与工程方案。目标是让团队在更短周期里交付更稳定、可持续演进的体验。
               </p>
             </div>
             <div className="space-y-4">
               {approach.map((item, index) => (
-                <article key={item.title} className="rounded-2xl border border-zinc-200 bg-white/70 p-5">
-                  <p className="text-xs tracking-[0.12em] uppercase text-zinc-500">{String(index + 1).padStart(2, "0")}</p>
-                  <h3 className="mt-2 text-lg font-semibold tracking-tight text-zinc-950">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-zinc-600">{item.detail}</p>
+                <article key={item.title} className="rounded-2xl border border-zinc-200 bg-white/70 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+                  <p className="text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">{String(index + 1).padStart(2, "0")}</p>
+                  <h3 className="font-display mt-2 text-lg font-semibold tracking-tight text-zinc-950 dark:text-zinc-100">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">{item.detail}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="contact" className="mt-20 border-t border-zinc-200 pt-12 fade-up">
-          <p className="text-xs tracking-[0.14em] uppercase text-zinc-500">Contact.</p>
-          <h2 className="mt-4 text-4xl leading-none font-semibold tracking-tight text-zinc-950 sm:text-6xl lg:text-7xl">
+        <section id="contact" className="mt-20 border-t border-zinc-200 pt-12 fade-up dark:border-zinc-800">
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">Contact.</p>
+          <h2 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-6xl lg:text-7xl">
             LET&apos;S BUILD
             <br />
             SOMETHING CLEAR.
           </h2>
-          <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600">
+          <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
             如果你正在做 0 到 1 产品，或者希望重构关键体验路径，欢迎联系我。我们可以从一次聚焦目标与优先级的讨论开始。
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             <a
               href="mailto:hello@example.com"
-              className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700"
+              className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
             >
               hello@example.com
             </a>
@@ -226,7 +230,7 @@ export default function Home() {
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950"
+              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
             >
               GitHub
             </a>
@@ -234,7 +238,7 @@ export default function Home() {
               href="https://www.linkedin.com"
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950"
+              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
             >
               LinkedIn
             </a>
@@ -242,7 +246,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500">
+      <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
         © {new Date().getFullYear()} YourName
       </footer>
     </div>
