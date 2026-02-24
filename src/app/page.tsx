@@ -1,29 +1,5 @@
-const projects = [
-  {
-    title: "WishVault 心愿库",
-    summary: "面向个人与家庭的礼物/心愿管理体验，重点优化记录、提醒与共享场景。",
-    tags: ["iOS", "SwiftUI", "SwiftData"],
-    impact: ["次日留存 +18%", "创建心愿耗时 -37%"],
-    href: "#",
-    status: "已上线",
-  },
-  {
-    title: "Personal Showcase",
-    summary: "一个以案例叙事为核心的个人网站，帮助访客快速理解能力与方法论。",
-    tags: ["Next.js", "Tailwind", "SEO"],
-    impact: ["首屏加载 < 1.8s", "联系转化 +24%"],
-    href: "#",
-    status: "持续迭代",
-  },
-  {
-    title: "Design Sprint Kit",
-    summary: "将需求澄清、信息架构与视觉规范沉淀为可复用模板，减少团队重复沟通。",
-    tags: ["Product", "UX", "System"],
-    impact: ["需求对齐周期 -42%", "交付一致性显著提升"],
-    href: "#",
-    status: "内部使用",
-  },
-];
+import Link from "next/link";
+import { projects } from "@/lib/projects";
 
 const navItems = [
   { label: "项目", href: "#projects" },
@@ -147,12 +123,12 @@ export default function Home() {
                   ))}
                 </div>
 
-                <a
-                  href={project.href}
+                <Link
+                  href={`/projects/${project.slug}`}
                   className="mt-5 inline-flex text-sm font-medium text-zinc-900 underline-offset-4 hover:underline"
                 >
                   查看详情
-                </a>
+                </Link>
               </article>
             ))}
           </div>
