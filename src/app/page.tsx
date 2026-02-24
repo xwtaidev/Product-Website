@@ -11,17 +11,20 @@ const navItems = [
 const process = [
   {
     title: "定义问题",
-    desc: "明确用户目标、业务约束和成功指标，避免做“看起来很忙”的功能。",
+    desc: "明确用户目标、业务约束和成功指标，避免做看起来很忙但不产生价值的功能。",
   },
   {
     title: "设计与验证",
-    desc: "先低成本验证信息架构与交互路径，再推进视觉细化与原型测试。",
+    desc: "先低成本验证信息架构与关键流程，再推进视觉细化与可用性测试。",
   },
   {
     title: "实现与迭代",
-    desc: "与开发共建组件与埋点，发布后持续基于数据和反馈优化。",
+    desc: "和开发共建组件与埋点，发布后用数据持续优化体验与转化。",
   },
 ];
+
+const bentoCard =
+  "rounded-3xl border border-black/5 bg-white p-6 shadow-[0_12px_40px_rgba(0,0,0,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(0,0,0,0.08)]";
 
 export default function Home() {
   return (
@@ -48,20 +51,20 @@ export default function Home() {
         </div>
       </header>
 
-      <main id="main-content">
-        <section className="mx-auto w-full max-w-6xl px-4 pt-16 pb-14 sm:px-6 lg:px-8 lg:pt-24 lg:pb-20">
-          <div className="grid items-end gap-10 lg:grid-cols-[1.35fr_1fr]">
-            <div className="max-w-3xl">
-              <p className="mb-4 text-sm font-medium text-zinc-500">Product Designer · Builder</p>
-              <h1 className="text-4xl leading-tight font-semibold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
-                把复杂需求，
+      <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6 lg:px-8">
+        <section className="pt-12 sm:pt-14 lg:pt-16">
+          <div className="grid auto-rows-[minmax(160px,auto)] gap-4 md:grid-cols-6 lg:gap-5">
+            <article className={`${bentoCard} md:col-span-4 md:row-span-2`}>
+              <p className="text-sm font-medium text-zinc-500">Product Designer · Builder</p>
+              <h1 className="mt-4 text-4xl leading-tight font-semibold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
+                用 Bento 风格叙事，
                 <br className="hidden sm:block" />
-                变成可增长的产品体验。
+                把你的能力讲得更清楚。
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-600 sm:text-lg">
-                我专注于从 0 到 1 的产品设计与实现，擅长把“模糊目标”拆解为清晰路径，并在真实使用中持续迭代。
+              <p className="mt-5 max-w-2xl text-base leading-8 text-zinc-600 sm:text-lg">
+                我专注于从 0 到 1 的产品设计与实现，把复杂目标拆解为可验证、可交付、可增长的用户体验。
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href="#projects"
                   className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700"
@@ -75,30 +78,36 @@ export default function Home() {
                   联系我
                 </a>
               </div>
-            </div>
+            </article>
 
-            <aside className="rounded-2xl border border-black/5 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-              <p className="text-sm font-medium text-zinc-500">最近成果</p>
-              <ul className="mt-4 space-y-3 text-sm text-zinc-700">
-                <li>• 3 个产品项目持续维护</li>
-                <li>• 平均交付周期缩短 40%+</li>
-                <li>• 可访问性默认按 WCAG AA 设计</li>
+            <article className={`${bentoCard} md:col-span-2`}>
+              <p className="text-xs font-medium tracking-wide text-zinc-500 uppercase">当前状态</p>
+              <p className="mt-3 text-3xl font-semibold tracking-tight">3 个活跃项目</p>
+              <p className="mt-2 text-sm text-zinc-600">覆盖 iOS 产品、Web 作品集与内部设计流程系统。</p>
+            </article>
+
+            <article className={`${bentoCard} md:col-span-2`}>
+              <p className="text-xs font-medium tracking-wide text-zinc-500 uppercase">近期结果</p>
+              <ul className="mt-3 space-y-2 text-sm text-zinc-700">
+                <li>• 次日留存 +18%</li>
+                <li>• 联系转化 +24%</li>
+                <li>• 需求对齐周期 -42%</li>
               </ul>
-            </aside>
+            </article>
           </div>
         </section>
 
-        <section id="projects" className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12" aria-label="项目列表">
+        <section id="projects" className="pt-14" aria-label="项目列表">
           <div className="mb-6 flex items-end justify-between">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">精选项目</h2>
             <span className="text-sm text-zinc-500">{projects.length} 个项目</span>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
+          <div className="grid auto-rows-[minmax(200px,auto)] gap-4 md:grid-cols-6 lg:gap-5">
+            {projects.map((project, index) => (
               <article
                 key={project.title}
-                className="flex h-full flex-col rounded-2xl border border-black/5 bg-white p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)]"
+                className={`${bentoCard} ${index === 0 ? "md:col-span-4" : "md:col-span-2"} flex h-full flex-col`}
               >
                 <div className="mb-3 inline-flex w-fit rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700">
                   {project.status}
@@ -134,40 +143,40 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="process" className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 lg:px-8" aria-label="工作方法">
-          <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] sm:p-8">
+        <section id="process" className="pt-14" aria-label="工作方法">
+          <div className="mb-6">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">我的工作方法</h2>
-            <div className="mt-7 grid gap-5 md:grid-cols-3">
-              {process.map((step, index) => (
-                <article key={step.title} className="rounded-2xl border border-zinc-200/70 bg-zinc-50 p-4">
-                  <p className="text-xs font-medium text-zinc-500">STEP {index + 1}</p>
-                  <h3 className="mt-2 text-base font-semibold tracking-tight">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600">{step.desc}</p>
-                </article>
-              ))}
-            </div>
+          </div>
+          <div className="grid auto-rows-[minmax(180px,auto)] gap-4 md:grid-cols-6 lg:gap-5">
+            {process.map((step, index) => (
+              <article key={step.title} className={`${bentoCard} md:col-span-2`}>
+                <p className="text-xs font-medium tracking-wide text-zinc-500 uppercase">STEP {index + 1}</p>
+                <h3 className="mt-2 text-lg font-semibold tracking-tight">{step.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-zinc-600">{step.desc}</p>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section id="about" className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-            <div>
+        <section id="about" className="pt-14">
+          <div className="grid auto-rows-[minmax(180px,auto)] gap-4 md:grid-cols-6 lg:gap-5">
+            <article className={`${bentoCard} md:col-span-4`}>
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">关于我</h2>
               <p className="mt-4 text-base leading-8 text-zinc-600">
                 我关注用户价值、业务目标与实现成本之间的平衡。习惯先定义成功标准，再对齐路径，最后通过迭代拿到结果。
               </p>
-            </div>
-            <ul className="space-y-3 rounded-2xl border border-black/5 bg-white p-6 text-sm text-zinc-700 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-              <li>• Product Strategy / Information Architecture</li>
-              <li>• UX Writing / Interaction Design</li>
-              <li>• SwiftUI / Next.js Prototype & Delivery</li>
+            </article>
+            <ul className={`${bentoCard} md:col-span-2 space-y-3 text-sm text-zinc-700`}>
+              <li>• Product Strategy / IA</li>
+              <li>• UX Writing / Interaction</li>
+              <li>• SwiftUI / Next.js Delivery</li>
               <li>• Data-informed Iteration</li>
             </ul>
           </div>
         </section>
 
-        <section id="contact" className="mx-auto w-full max-w-6xl px-4 pt-8 pb-20 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] sm:p-8">
+        <section id="contact" className="pt-14">
+          <article className={bentoCard}>
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">联系我</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-600">欢迎合作、交流或产品讨论。24 小时内回复。</p>
             <div className="mt-5 flex flex-wrap gap-3 text-sm">
@@ -191,7 +200,7 @@ export default function Home() {
                 LinkedIn
               </a>
             </div>
-          </div>
+          </article>
         </section>
       </main>
 
