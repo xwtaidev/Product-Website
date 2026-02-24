@@ -1,15 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme-toggle";
+import SiteHeader from "@/components/site-header";
+import { blogPosts } from "@/lib/blog-posts";
 import { projects } from "@/lib/projects";
-
-const navItems = [
-  { label: "Work", href: "#work" },
-  { label: "Blog", href: "#blog" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
 
 const socialLinks = [
   { label: "GitHub", href: "https://github.com" },
@@ -55,49 +48,6 @@ const approach = [
   },
 ];
 
-const blogPosts = [
-  {
-    slug: "research-to-decision",
-    title: "把用户访谈结果转成可执行的产品决策",
-    excerpt:
-      "当访谈素材变多时，团队最常见的问题不是信息不够，而是无法把结论收敛为版本策略。本文分享我常用的三步方法。",
-    category: "Product Research",
-    readTime: "8 min",
-    publishedAt: "2026.02.12",
-    coverImage: "https://picsum.photos/seed/blog-research-decision/1200/800",
-  },
-  {
-    slug: "swiftui-nextjs-system",
-    title: "SwiftUI 与 Next.js 的跨端设计系统同步",
-    excerpt:
-      "从 Token 命名、组件边界到版本发布流程，如何让移动端与 Web 端在迭代中保持一致且可维护。",
-    category: "Design System",
-    readTime: "6 min",
-    publishedAt: "2026.01.30",
-    coverImage: "https://picsum.photos/seed/blog-swiftui-nextjs/1200/800",
-  },
-  {
-    slug: "scope-by-kpi",
-    title: "用 KPI 反推 MVP 范围，避免做完才发现方向错误",
-    excerpt:
-      "在资源有限的阶段，与其讨论功能清单，不如先锚定要影响的指标，再反向定义必须上线的关键路径。",
-    category: "Product Strategy",
-    readTime: "5 min",
-    publishedAt: "2026.01.18",
-    coverImage: "https://picsum.photos/seed/blog-scope-kpi/1200/800",
-  },
-  {
-    slug: "delivery-playbook",
-    title: "高频迭代团队的交付节奏设计：一份可复用 Playbook",
-    excerpt:
-      "把探索、设计、开发与复盘拆成可度量的节奏单元，减少返工，并持续提高发布质量与协作效率。",
-    category: "Team Workflow",
-    readTime: "7 min",
-    publishedAt: "2025.12.27",
-    coverImage: "https://picsum.photos/seed/blog-delivery-playbook/1200/800",
-  },
-];
-
 const headline = [
   "Designing and shipping",
   "digital products",
@@ -120,26 +70,7 @@ export default function Home() {
         <div className="hero-glow hero-glow-bottom" />
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[var(--header-bg)] backdrop-blur-md dark:border-zinc-800/80">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <a href="#" className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-zinc-950 dark:text-zinc-100">
-            YOURNAME.
-          </a>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <nav
-              aria-label="Main navigation"
-              className="font-display flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5 dark:text-zinc-400"
-            >
-              {navItems.map((item) => (
-                <a key={item.label} href={item.href} className="transition hover:text-zinc-950 dark:hover:text-zinc-100">
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            <ThemeToggle className="ml-2 sm:ml-3" />
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
@@ -177,7 +108,15 @@ export default function Home() {
         <section id="work" className="mt-20 fade-up" aria-label="Work">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
-            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
+              <Link
+                href="/work"
+                className="text-xs tracking-[0.14em] uppercase text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
+              >
+                View all →
+              </Link>
+            </div>
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -222,9 +161,17 @@ export default function Home() {
         <section id="blog" className="mt-20 fade-up" aria-label="Blog">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Blog.</h2>
-            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
-              {blogPosts.length} latest writings
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
+                {blogPosts.length} latest writings
+              </span>
+              <Link
+                href="/blog"
+                className="text-xs tracking-[0.14em] uppercase text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
+              >
+                View all →
+              </Link>
+            </div>
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1.28fr_0.92fr]">
