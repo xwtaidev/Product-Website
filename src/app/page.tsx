@@ -1,34 +1,68 @@
+import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/lib/projects";
 
 const navItems = [
-  { label: "Projects", href: "#projects" },
-  { label: "Process", href: "#process" },
+  { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
 
-const process = [
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com" },
+  { label: "LinkedIn", href: "https://www.linkedin.com" },
+  { label: "Email", href: "mailto:hello@example.com" },
+];
+
+const services = [
   {
-    title: "01 Define",
-    desc: "Align user goals, business constraints, and success metrics before proposing any interface.",
+    title: "Product Strategy",
+    description:
+      "定义用户场景、业务目标和验证指标，把方向不清的问题收敛成可执行方案。",
   },
   {
-    title: "02 Validate",
-    desc: "Prototype fast, test key flows early, and keep only what creates measurable value.",
+    title: "Experience Design",
+    description:
+      "设计信息架构和关键交互路径，确保产品在复杂场景下依旧清晰可用。",
   },
   {
-    title: "03 Deliver",
-    desc: "Ship with reusable components and iterate through evidence, not assumptions.",
+    title: "Frontend Delivery",
+    description:
+      "使用 SwiftUI 与 Next.js 实现高保真界面，建立长期可维护的组件体系。",
+  },
+  {
+    title: "Iteration Systems",
+    description:
+      "以数据和反馈驱动迭代节奏，让产品优化持续发生而不是一次性交付。",
   },
 ];
 
-const cardBase =
-  "rounded-2xl border border-zinc-200 bg-white p-5 transition duration-200 hover:border-zinc-400";
+const approach = [
+  {
+    title: "Define",
+    detail: "先明确目标用户和成功指标，避免在错误方向里做高质量执行。",
+  },
+  {
+    title: "Validate",
+    detail: "通过低成本原型与快速测试验证关键假设，减少上线风险。",
+  },
+  {
+    title: "Scale",
+    detail: "把有效方案沉淀成组件和规则，支撑团队持续迭代。",
+  },
+];
+
+const headline = [
+  "Designing and shipping",
+  "digital products",
+  "with measurable",
+  "business outcomes.",
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f4f4f2] text-zinc-900 selection:bg-zinc-900 selection:text-white">
+    <div className="min-h-[100dvh] bg-background text-zinc-950">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-zinc-900 focus:px-3 focus:py-2 focus:text-sm focus:text-white"
@@ -36,14 +70,22 @@ export default function Home() {
         Skip to main content
       </a>
 
-      <header className="sticky top-0 z-30 border-b border-zinc-200 bg-[#f4f4f2]/90 backdrop-blur-md">
-        <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <a href="#" className="text-sm font-semibold tracking-[0.08em] uppercase">
-            YOURNAME
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="hero-glow hero-glow-top" />
+        <div className="hero-glow hero-glow-bottom" />
+      </div>
+
+      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[#f7f7f4]/85 backdrop-blur-md">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <a href="#" className="text-sm font-semibold tracking-[0.2em] uppercase">
+            YOURNAME.
           </a>
-          <nav className="flex items-center gap-4 text-xs tracking-[0.08em] uppercase text-zinc-600 sm:gap-5" aria-label="Main navigation">
+          <nav
+            aria-label="Main navigation"
+            className="flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5"
+          >
             {navItems.map((item) => (
-              <a key={item.label} href={item.href} className="transition hover:text-zinc-900">
+              <a key={item.label} href={item.href} className="transition hover:text-zinc-950">
                 {item.label}
               </a>
             ))}
@@ -51,146 +93,156 @@ export default function Home() {
         </div>
       </header>
 
-      <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6 lg:px-8">
-        <section className="pt-10 sm:pt-12">
-          <div className="grid auto-rows-[minmax(140px,auto)] gap-3 md:grid-cols-12">
-            <article className="rounded-2xl border border-zinc-900 bg-zinc-900 p-6 text-zinc-100 md:col-span-8 md:row-span-2">
-              <p className="text-xs tracking-[0.08em] uppercase text-zinc-400">Product Design Portfolio</p>
-              <h1 className="mt-4 text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-                Structured work.
-                <br className="hidden sm:block" />
-                Measurable outcomes.
+      <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+        <section className="fade-up">
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600">Product Designer & Frontend Builder</p>
+          <div className="mt-5 space-y-1 text-zinc-950">
+            {headline.map((line) => (
+              <h1
+                key={line}
+                className="text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl"
+              >
+                {line}
               </h1>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-zinc-300">
-                I design and build digital products from 0 to 1. The focus is always the same: clear problems,
-                practical systems, and results you can track.
-              </p>
-              <div className="mt-7 flex flex-wrap gap-2 text-xs tracking-[0.08em] uppercase">
-                <a href="#projects" className="rounded-full bg-white px-4 py-2 font-semibold text-zinc-900">
-                  View Projects
-                </a>
-                <a href="#contact" className="rounded-full border border-white/30 px-4 py-2 text-zinc-200 hover:bg-white/10">
-                  Contact
-                </a>
-              </div>
-            </article>
-
-            <article className={`${cardBase} md:col-span-4`}>
-              <p className="text-[11px] tracking-[0.08em] uppercase text-zinc-500">Active</p>
-              <p className="mt-3 text-3xl font-semibold tracking-tight">3 Projects</p>
-              <p className="mt-2 text-sm leading-6 text-zinc-600">iOS product, portfolio platform, and internal design toolkit.</p>
-            </article>
-
-            <article className={`${cardBase} md:col-span-4`}>
-              <p className="text-[11px] tracking-[0.08em] uppercase text-zinc-500">Highlights</p>
-              <ul className="mt-3 space-y-2 text-sm text-zinc-700">
-                <li>+18% D1 retention</li>
-                <li>+24% contact conversion</li>
-                <li>-42% requirement alignment time</li>
-              </ul>
-            </article>
-          </div>
-        </section>
-
-        <section id="projects" className="pt-12" aria-label="Projects">
-          <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Projects Index</h2>
-            <span className="text-xs tracking-[0.08em] uppercase text-zinc-500">{projects.length} entries</span>
-          </div>
-
-          <div className="grid auto-rows-[minmax(180px,auto)] gap-3 md:grid-cols-12">
-            {projects.map((project, index) => (
-              <article
-                key={project.title}
-                className={`${cardBase} ${index === 0 ? "md:col-span-6" : "md:col-span-3"} flex h-full flex-col justify-between`}
-              >
-                <div>
-                  <div className="mb-3 inline-flex w-fit rounded-full border border-zinc-300 px-2.5 py-1 text-[11px] tracking-[0.06em] uppercase text-zinc-600">
-                    {project.status}
-                  </div>
-                  <h3 className="text-base font-semibold tracking-tight">{project.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600">{project.summary}</p>
-                  <div className="mt-3 space-y-1 text-xs text-zinc-500">
-                    {project.impact.map((item) => (
-                      <p key={`${project.title}-${item}`}>{item}</p>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-4 flex items-center justify-between gap-2">
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span key={`${project.title}-${tag}`} className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <Link href={`/projects/${project.slug}`} className="text-xs font-medium tracking-[0.06em] uppercase text-zinc-800 hover:underline">
-                    Open
-                  </Link>
-                </div>
-              </article>
             ))}
           </div>
-        </section>
 
-        <section id="process" className="pt-12" aria-label="Process">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Process</h2>
-          </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            {process.map((step) => (
-              <article key={step.title} className={cardBase}>
-                <h3 className="text-sm font-semibold tracking-[0.06em] uppercase text-zinc-700">{step.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-zinc-600">{step.desc}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+          <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600">
+            我把产品策略、体验设计和前端实现放在同一条链路里推进，聚焦核心路径的用户价值和业务结果。下面是近期的代表项目、服务范围与协作方式。
+          </p>
 
-        <section id="about" className="pt-12">
-          <div className="grid gap-3 md:grid-cols-12">
-            <article className={`${cardBase} md:col-span-8`}>
-              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">About</h2>
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-600">
-                I work across product strategy, UX writing, interaction design, and front-end implementation. My core
-                principle is to keep systems simple and outcomes explicit.
-              </p>
-            </article>
-            <ul className={`${cardBase} md:col-span-4 space-y-2 text-sm text-zinc-700`}>
-              <li>Product Strategy / IA</li>
-              <li>UX Writing / Interaction</li>
-              <li>SwiftUI / Next.js Delivery</li>
-              <li>Data-informed Iteration</li>
-            </ul>
-          </div>
-        </section>
-
-        <section id="contact" className="pt-12">
-          <article className="rounded-2xl border border-zinc-900 bg-zinc-900 p-6 text-zinc-100">
-            <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Contact</h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-300">Open for collaborations, consulting, and product design projects.</p>
-            <div className="mt-5 flex flex-wrap gap-2 text-xs tracking-[0.06em] uppercase">
-              <a className="rounded-full bg-white px-4 py-2 font-semibold text-zinc-900" href="mailto:hello@example.com">
-                hello@example.com
-              </a>
-              <a className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10" href="https://github.com" target="_blank" rel="noreferrer">
-                GitHub
-              </a>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {socialLinks.map((link) => (
               <a
-                className="rounded-full border border-white/30 px-4 py-2 hover:bg-white/10"
-                href="https://www.linkedin.com"
-                target="_blank"
-                rel="noreferrer"
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                className="rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950"
               >
-                LinkedIn
+                {link.label}
               </a>
+            ))}
+          </div>
+        </section>
+
+        <section id="work" className="mt-20 fade-up" aria-label="Work">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
+            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500">{projects.length} selected projects</span>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {projects.map((project, index) => (
+              <article key={project.slug} className={index === 0 ? "md:col-span-2" : ""}>
+                <Link href={`/projects/${project.slug}`} className="group block">
+                  <div
+                    className={`relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 ${
+                      index === 0 ? "aspect-[16/8]" : "aspect-[4/3]"
+                    }`}
+                  >
+                    <Image
+                      src={project.coverImage}
+                      alt={project.title}
+                      fill
+                      priority={index === 0}
+                      sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                      className="h-full w-full object-cover opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+                    <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                      {project.status}
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+                      <div>
+                        <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
+                        <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{project.title}</h3>
+                      </div>
+                      <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">Case</span>
+                    </div>
+                  </div>
+                </Link>
+
+                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600">{project.summary}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="services" className="mt-20 fade-up">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Services.</h2>
+          <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
+            {services.map((service, index) => (
+              <article
+                key={service.title}
+                className="rounded-2xl border border-zinc-200 bg-white/80 p-6 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] hover:border-zinc-400"
+              >
+                <p className="text-xs tracking-[0.12em] uppercase text-zinc-500">{String(index + 1).padStart(2, "0")}</p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950">{service.title}</h3>
+                <p className="mt-3 text-base leading-7 text-zinc-600">{service.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="about" className="mt-20 fade-up">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.35fr_1fr]">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">About.</h2>
+              <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 sm:text-2xl sm:leading-10">
+                我关注复杂产品中的核心交互路径，擅长把模糊需求转成可验证的设计与工程方案。目标是让团队在更短周期里交付更稳定、可持续演进的体验。
+              </p>
             </div>
-          </article>
+            <div className="space-y-4">
+              {approach.map((item, index) => (
+                <article key={item.title} className="rounded-2xl border border-zinc-200 bg-white/70 p-5">
+                  <p className="text-xs tracking-[0.12em] uppercase text-zinc-500">{String(index + 1).padStart(2, "0")}</p>
+                  <h3 className="mt-2 text-lg font-semibold tracking-tight text-zinc-950">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-zinc-600">{item.detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="mt-20 border-t border-zinc-200 pt-12 fade-up">
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-500">Contact.</p>
+          <h2 className="mt-4 text-4xl leading-none font-semibold tracking-tight text-zinc-950 sm:text-6xl lg:text-7xl">
+            LET&apos;S BUILD
+            <br />
+            SOMETHING CLEAR.
+          </h2>
+          <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600">
+            如果你正在做 0 到 1 产品，或者希望重构关键体验路径，欢迎联系我。我们可以从一次聚焦目标与优先级的讨论开始。
+          </p>
+          <div className="mt-8 flex flex-wrap gap-2">
+            <a
+              href="mailto:hello@example.com"
+              className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700"
+            >
+              hello@example.com
+            </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950"
+            >
+              LinkedIn
+            </a>
+          </div>
         </section>
       </main>
 
-      <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.06em] uppercase text-zinc-500">
+      <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500">
         © {new Date().getFullYear()} YourName
       </footer>
     </div>
