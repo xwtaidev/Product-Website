@@ -5,6 +5,7 @@ import { projects } from "@/lib/projects";
 
 const navItems = [
   { label: "Work", href: "#work" },
+  { label: "Blog", href: "#blog" },
   { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
@@ -54,6 +55,49 @@ const approach = [
   },
 ];
 
+const blogPosts = [
+  {
+    slug: "research-to-decision",
+    title: "把用户访谈结果转成可执行的产品决策",
+    excerpt:
+      "当访谈素材变多时，团队最常见的问题不是信息不够，而是无法把结论收敛为版本策略。本文分享我常用的三步方法。",
+    category: "Product Research",
+    readTime: "8 min",
+    publishedAt: "2026.02.12",
+    coverImage: "https://picsum.photos/seed/blog-research-decision/1200/800",
+  },
+  {
+    slug: "swiftui-nextjs-system",
+    title: "SwiftUI 与 Next.js 的跨端设计系统同步",
+    excerpt:
+      "从 Token 命名、组件边界到版本发布流程，如何让移动端与 Web 端在迭代中保持一致且可维护。",
+    category: "Design System",
+    readTime: "6 min",
+    publishedAt: "2026.01.30",
+    coverImage: "https://picsum.photos/seed/blog-swiftui-nextjs/1200/800",
+  },
+  {
+    slug: "scope-by-kpi",
+    title: "用 KPI 反推 MVP 范围，避免做完才发现方向错误",
+    excerpt:
+      "在资源有限的阶段，与其讨论功能清单，不如先锚定要影响的指标，再反向定义必须上线的关键路径。",
+    category: "Product Strategy",
+    readTime: "5 min",
+    publishedAt: "2026.01.18",
+    coverImage: "https://picsum.photos/seed/blog-scope-kpi/1200/800",
+  },
+  {
+    slug: "delivery-playbook",
+    title: "高频迭代团队的交付节奏设计：一份可复用 Playbook",
+    excerpt:
+      "把探索、设计、开发与复盘拆成可度量的节奏单元，减少返工，并持续提高发布质量与协作效率。",
+    category: "Team Workflow",
+    readTime: "7 min",
+    publishedAt: "2025.12.27",
+    coverImage: "https://picsum.photos/seed/blog-delivery-playbook/1200/800",
+  },
+];
+
 const headline = [
   "Designing and shipping",
   "digital products",
@@ -84,7 +128,7 @@ export default function Home() {
           <div className="flex items-center gap-2 sm:gap-3">
             <nav
               aria-label="Main navigation"
-              className="flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5 dark:text-zinc-400"
+              className="font-display flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5 dark:text-zinc-400"
             >
               {navItems.map((item) => (
                 <a key={item.label} href={item.href} className="transition hover:text-zinc-950 dark:hover:text-zinc-100">
@@ -160,7 +204,9 @@ export default function Home() {
                     <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
                       <div>
                         <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
-                        <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{project.title}</h3>
+                        <h3 className="font-display mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                          {project.title}
+                        </h3>
                       </div>
                       <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">Case</span>
                     </div>
@@ -170,6 +216,89 @@ export default function Home() {
                 <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section id="blog" className="mt-20 fade-up" aria-label="Blog">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Blog.</h2>
+            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
+              {blogPosts.length} latest writings
+            </span>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1.28fr_0.92fr]">
+            <article className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/70">
+              <div className="relative aspect-[16/9] overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+                <Image
+                  src={blogPosts[0].coverImage}
+                  alt={blogPosts[0].title}
+                  fill
+                  sizes="(min-width: 1024px) 62vw, 100vw"
+                  className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+                <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                  Featured
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="flex flex-wrap items-center gap-2 text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
+                  <span>{blogPosts[0].category}</span>
+                  <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                  <span>{blogPosts[0].publishedAt}</span>
+                  <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                  <span>{blogPosts[0].readTime}</span>
+                </div>
+                <h3 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-3xl">
+                  {blogPosts[0].title}
+                </h3>
+                <p className="mt-4 max-w-[64ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+                  {blogPosts[0].excerpt}
+                </p>
+                <a
+                  href="#contact"
+                  className="mt-6 inline-flex rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+                >
+                  Discuss this topic
+                </a>
+              </div>
+            </article>
+
+            <div className="rounded-2xl border border-zinc-200 bg-white/65 divide-y divide-zinc-200/80 dark:border-zinc-800 dark:bg-zinc-900/55 dark:divide-zinc-800/90">
+              {blogPosts.slice(1).map((post) => (
+                <article
+                  key={post.slug}
+                  className="group px-4 py-4 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/95 sm:px-5"
+                >
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-[112px_1fr] sm:items-start">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
+                      <Image
+                        src={post.coverImage}
+                        alt={post.title}
+                        fill
+                        sizes="(min-width: 1024px) 240px, (min-width: 640px) 120px, 100vw"
+                        className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
+                        <span>{post.category}</span>
+                        <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                        <span>{post.publishedAt}</span>
+                        <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                        <span>{post.readTime}</span>
+                      </div>
+                      <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 transition group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
+                        {post.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">{post.excerpt}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
