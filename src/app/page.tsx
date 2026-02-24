@@ -1,162 +1,253 @@
-const projects = [
+import Image from "next/image";
+import Link from "next/link";
+import ThemeToggle from "@/components/theme-toggle";
+import { projects } from "@/lib/projects";
+
+const navItems = [
+  { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
+];
+
+const socialLinks = [
+  { label: "GitHub", href: "https://github.com" },
+  { label: "LinkedIn", href: "https://www.linkedin.com" },
+  { label: "Email", href: "mailto:hello@example.com" },
+];
+
+const services = [
   {
-    title: "WishVault 心愿库",
-    summary: "面向个人与家庭的礼物/心愿管理体验，强调归属、状态与仪式感。",
-    tags: ["iOS", "SwiftUI", "SwiftData"],
-    href: "#",
+    title: "Product Strategy",
+    description:
+      "定义用户场景、业务目标和验证指标，把方向不清的问题收敛成可执行方案。",
   },
   {
-    title: "Personal Showcase",
-    summary: "一个以内容为中心的个人产品展示网站，突出案例、方法与结果。",
-    tags: ["Next.js", "Tailwind", "SEO"],
-    href: "#",
+    title: "Experience Design",
+    description:
+      "设计信息架构和关键交互路径，确保产品在复杂场景下依旧清晰可用。",
   },
   {
-    title: "Design Sprint Kit",
-    summary: "将需求澄清、信息架构与视觉规范打包成可复用工作流。",
-    tags: ["Product", "UX", "System"],
-    href: "#",
+    title: "Frontend Delivery",
+    description:
+      "使用 SwiftUI 与 Next.js 实现高保真界面，建立长期可维护的组件体系。",
+  },
+  {
+    title: "Iteration Systems",
+    description:
+      "以数据和反馈驱动迭代节奏，让产品优化持续发生而不是一次性交付。",
   },
 ];
 
-const navItems = [
-  { label: "项目", href: "#projects" },
-  { label: "关于", href: "#about" },
-  { label: "联系", href: "#contact" },
+const approach = [
+  {
+    title: "Define",
+    detail: "先明确目标用户和成功指标，避免在错误方向里做高质量执行。",
+  },
+  {
+    title: "Validate",
+    detail: "通过低成本原型与快速测试验证关键假设，减少上线风险。",
+  },
+  {
+    title: "Scale",
+    detail: "把有效方案沉淀成组件和规则，支撑团队持续迭代。",
+  },
+];
+
+const headline = [
+  "Designing and shipping",
+  "digital products",
+  "with measurable",
+  "business outcomes.",
 ];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-white/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <a href="#" className="text-sm font-semibold tracking-tight">
-            YourName
+    <div className="min-h-[100dvh] bg-background text-zinc-950 dark:text-zinc-100">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-zinc-900 focus:px-3 focus:py-2 focus:text-sm focus:text-white dark:focus:bg-zinc-100 dark:focus:text-zinc-950"
+      >
+        Skip to main content
+      </a>
+
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="hero-glow hero-glow-top" />
+        <div className="hero-glow hero-glow-bottom" />
+      </div>
+
+      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[var(--header-bg)] backdrop-blur-md dark:border-zinc-800/80">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <a href="#" className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-zinc-950 dark:text-zinc-100">
+            YOURNAME.
           </a>
-          <nav className="flex items-center gap-5 text-sm text-zinc-600">
-            {navItems.map((item) => (
-              <a key={item.label} href={item.href} className="transition hover:text-zinc-900">
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <nav
+              aria-label="Main navigation"
+              className="flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5 dark:text-zinc-400"
+            >
+              {navItems.map((item) => (
+                <a key={item.label} href={item.href} className="transition hover:text-zinc-950 dark:hover:text-zinc-100">
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+            <ThemeToggle className="ml-2 sm:ml-3" />
+          </div>
         </div>
       </header>
 
-      <main>
-        <section className="mx-auto w-full max-w-6xl px-4 pt-20 pb-16 sm:px-6 lg:px-8 lg:pt-24 lg:pb-24">
-          <div className="max-w-3xl">
-            <p className="mb-4 text-sm font-medium text-zinc-500">Product Designer · Builder</p>
-            <h1 className="text-4xl leading-tight font-semibold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
-              以简洁的产品体验，
-              <br className="hidden sm:block" />
-              解决真实问题。
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-600 sm:text-lg">
-              我专注于从 0 到 1 的产品设计与实现，擅长将复杂需求拆解为清晰、可落地、可增长的体验。
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <a
-                href="#projects"
-                className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700"
+      <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+        <section className="fade-up">
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Product Designer & Frontend Builder</p>
+          <div className="mt-5 space-y-1 text-zinc-950 dark:text-zinc-100">
+            {headline.map((line) => (
+              <h1
+                key={line}
+                className="font-display text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl"
               >
-                查看项目
-              </a>
+                {line}
+              </h1>
+            ))}
+          </div>
+
+          <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+            我把产品策略、体验设计和前端实现放在同一条链路里推进，聚焦核心路径的用户价值和业务结果。下面是近期的代表项目、服务范围与协作方式。
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-2">
+            {socialLinks.map((link) => (
               <a
-                href="#contact"
-                className="rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-sm font-medium text-zinc-800 transition hover:bg-zinc-100"
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                className="rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
               >
-                联系我
+                {link.label}
               </a>
-            </div>
+            ))}
           </div>
         </section>
 
-        <section id="projects" className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-          <div className="mb-6 flex items-end justify-between">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">产品项目</h2>
-            <span className="text-sm text-zinc-500">{projects.length} 个项目</span>
+        <section id="work" className="mt-20 fade-up" aria-label="Work">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
+            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <article
-                key={project.title}
-                className="rounded-2xl border border-black/5 bg-white p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(0,0,0,0.06)]"
-              >
-                <h3 className="text-lg font-semibold tracking-tight">{project.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-zinc-600">{project.summary}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={`${project.title}-${tag}`}
-                      className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href={project.href}
-                  className="mt-5 inline-flex text-sm font-medium text-zinc-900 underline-offset-4 hover:underline"
-                >
-                  查看详情
-                </a>
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {projects.map((project, index) => (
+              <article key={project.slug} className={index === 0 ? "md:col-span-2" : ""}>
+                <Link href={`/projects/${project.slug}`} className="group block">
+                  <div
+                    className={`relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 ${
+                      index === 0 ? "aspect-[16/8]" : "aspect-[4/3]"
+                    } dark:border-zinc-800`}
+                  >
+                    <Image
+                      src={project.coverImage}
+                      alt={project.title}
+                      fill
+                      priority={index === 0}
+                      sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                      className="h-full w-full object-cover opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+                    <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                      {project.status}
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+                      <div>
+                        <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
+                        <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{project.title}</h3>
+                      </div>
+                      <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">Case</span>
+                    </div>
+                  </div>
+                </Link>
+
+                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section id="about" className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">关于我</h2>
-              <p className="mt-4 text-base leading-8 text-zinc-600">
-                我关注用户需求、业务目标与实现成本之间的平衡。习惯先定义问题，再设计路径，最后通过迭代验证价值。
-              </p>
-            </div>
-            <ul className="space-y-3 rounded-2xl border border-black/5 bg-white p-6 text-sm text-zinc-700 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-              <li>• Product Strategy / Information Architecture</li>
-              <li>• UX Writing / Interaction Design</li>
-              <li>• SwiftUI / Next.js Prototype & Delivery</li>
-              <li>• Data-driven Iteration</li>
-            </ul>
+        <section id="services" className="mt-20 fade-up">
+          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Services.</h2>
+          <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
+            {services.map((service, index) => (
+              <article
+                key={service.title}
+                className="rounded-2xl border border-zinc-200 bg-white/80 p-6 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900/70 dark:hover:border-zinc-600"
+              >
+                <p className="text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">{String(index + 1).padStart(2, "0")}</p>
+                <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100">{service.title}</h3>
+                <p className="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">{service.description}</p>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section id="contact" className="mx-auto w-full max-w-6xl px-4 pt-2 pb-20 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">联系我</h2>
-            <p className="mt-3 text-sm leading-7 text-zinc-600">
-              欢迎合作、交流或产品讨论。你可以通过以下方式联系我。
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3 text-sm">
-              <a className="rounded-full bg-zinc-900 px-4 py-2 text-white" href="mailto:hello@example.com">
-                hello@example.com
-              </a>
-              <a
-                className="rounded-full border border-zinc-300 px-4 py-2 text-zinc-800 hover:bg-zinc-100"
-                href="https://github.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub
-              </a>
-              <a
-                className="rounded-full border border-zinc-300 px-4 py-2 text-zinc-800 hover:bg-zinc-100"
-                href="https://www.linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn
-              </a>
+        <section id="about" className="mt-20 fade-up">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.35fr_1fr]">
+            <div>
+              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">About.</h2>
+              <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 dark:text-zinc-300 sm:text-2xl sm:leading-10">
+                我关注复杂产品中的核心交互路径，擅长把模糊需求转成可验证的设计与工程方案。目标是让团队在更短周期里交付更稳定、可持续演进的体验。
+              </p>
             </div>
+            <div className="space-y-4">
+              {approach.map((item, index) => (
+                <article key={item.title} className="rounded-2xl border border-zinc-200 bg-white/70 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+                  <p className="text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">{String(index + 1).padStart(2, "0")}</p>
+                  <h3 className="font-display mt-2 text-lg font-semibold tracking-tight text-zinc-950 dark:text-zinc-100">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">{item.detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="mt-20 border-t border-zinc-200 pt-12 fade-up dark:border-zinc-800">
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">Contact.</p>
+          <h2 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-6xl lg:text-7xl">
+            LET&apos;S BUILD
+            <br />
+            SOMETHING CLEAR.
+          </h2>
+          <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+            如果你正在做 0 到 1 产品，或者希望重构关键体验路径，欢迎联系我。我们可以从一次聚焦目标与优先级的讨论开始。
+          </p>
+          <div className="mt-8 flex flex-wrap gap-2">
+            <a
+              href="mailto:hello@example.com"
+              className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+            >
+              hello@example.com
+            </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+            >
+              LinkedIn
+            </a>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-black/5 py-6 text-center text-xs text-zinc-500">
-        © {new Date().getFullYear()} YourName. All rights reserved.
+      <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+        © {new Date().getFullYear()} YourName
       </footer>
     </div>
   );
