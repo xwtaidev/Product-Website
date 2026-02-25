@@ -24,7 +24,13 @@ export default function BlogPage() {
 
       <main className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
-          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Blog List</p>
+          <Link
+            href="/"
+            className="inline-flex text-xs tracking-[0.12em] uppercase text-zinc-600 transition hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            ← 返回首页
+          </Link>
+          <p className="mt-4 text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Blog List</p>
           <h1 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl">
             Writing Notes
             <br />

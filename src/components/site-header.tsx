@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/theme-toggle";
 
 const navItems = [
@@ -12,8 +13,21 @@ const navItems = [
   { label: "Contact", href: "/#contact" },
 ];
 
+function isActiveNavItem(pathname: string, href: string) {
+  if (href === "/work") {
+    return pathname === "/work" || pathname.startsWith("/projects/");
+  }
+
+  if (href === "/blog") {
+    return pathname === "/blog" || pathname.startsWith("/blog/");
+  }
+
+  return false;
+}
+
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[var(--header-bg)] backdrop-blur-md dark:border-zinc-800/80">
@@ -27,15 +41,25 @@ export default function SiteHeader() {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <nav
-            aria-label="Main navigation"
-            className="font-display hidden items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:flex sm:gap-5 dark:text-zinc-400"
-          >
-            {navItems.map((item) => (
-              <Link key={item.label} href={item.href} className="transition hover:text-zinc-950 dark:hover:text-zinc-100">
-                {item.label}
-              </Link>
-            ))}
+          <nav aria-label="Main navigation" className="font-display hidden items-center gap-1 text-[11px] tracking-[0.12em] uppercase sm:flex">
+            {navItems.map((item) => {
+              const isActive = isActiveNavItem(pathname, item.href);
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`rounded-full px-3 py-1.5 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    isActive
+                      ? "bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-950"
+                      : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <ThemeToggle className="ml-1 sm:ml-3" />
@@ -63,16 +87,25 @@ export default function SiteHeader() {
       {menuOpen ? (
         <div id="mobile-main-nav" className="border-t border-zinc-200/80 px-4 py-3 sm:hidden dark:border-zinc-800/80">
           <nav aria-label="Mobile navigation" className="font-display grid gap-1 text-[11px] tracking-[0.12em] uppercase text-zinc-700 dark:text-zinc-300">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="rounded-lg px-2 py-2.5 transition hover:bg-zinc-100 hover:text-zinc-950 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = isActiveNavItem(pathname, item.href);
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`rounded-lg px-2 py-2.5 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    isActive
+                      ? "bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-950"
+                      : "hover:bg-zinc-100 hover:text-zinc-950 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
+                  }`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       ) : null}
