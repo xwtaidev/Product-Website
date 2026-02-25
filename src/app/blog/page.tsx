@@ -39,47 +39,46 @@ export default function BlogPage() {
           <div className="space-y-6">
             {featuredPost ? (
               <article className="group overflow-hidden rounded-3xl border border-zinc-200 bg-white/82 fade-up dark:border-zinc-800 dark:bg-zinc-900/72">
-                <div className="relative aspect-[16/9] overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
-                  <Image
-                    src={featuredPost.coverImage}
-                    alt={featuredPost.title}
-                    fill
-                    priority
-                    sizes="(min-width: 1024px) 860px, 100vw"
-                    className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/56 via-black/12 to-transparent" />
-                  <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
-                    Featured Writing
+                <Link href={`/blog/${featuredPost.slug}`} className="block">
+                  <div className="relative aspect-[16/9] overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+                    <Image
+                      src={featuredPost.coverImage}
+                      alt={featuredPost.title}
+                      fill
+                      priority
+                      sizes="(min-width: 1024px) 860px, 100vw"
+                      className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/56 via-black/12 to-transparent" />
+                    <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                      Featured Writing
+                    </div>
                   </div>
-                </div>
 
-                <div className="p-6">
-                  <div className="flex flex-wrap items-center gap-2 text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
-                    <span>{featuredPost.category}</span>
-                    <span className="text-zinc-300 dark:text-zinc-600">•</span>
-                    <span>{featuredPost.publishedAt}</span>
-                    <span className="text-zinc-300 dark:text-zinc-600">•</span>
-                    <span>{featuredPost.readTime}</span>
+                  <div className="p-6">
+                    <div className="flex flex-wrap items-center gap-2 text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
+                      <span>{featuredPost.category}</span>
+                      <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                      <span>{featuredPost.publishedAt}</span>
+                      <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                      <span>{featuredPost.readTime}</span>
+                    </div>
+                    <h2 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-3xl">
+                      {featuredPost.title}
+                    </h2>
+                    <p className="mt-4 text-base leading-8 text-zinc-600 dark:text-zinc-300">{featuredPost.excerpt}</p>
+                    <span className="mt-6 inline-flex rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-[1px] group-hover:border-zinc-500 group-hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:group-hover:border-zinc-500 dark:group-hover:text-zinc-100">
+                      Read article
+                    </span>
                   </div>
-                  <h2 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-3xl">
-                    {featuredPost.title}
-                  </h2>
-                  <p className="mt-4 text-base leading-8 text-zinc-600 dark:text-zinc-300">{featuredPost.excerpt}</p>
-                  <a
-                    href={`mailto:hello@example.com?subject=${encodeURIComponent(`Read ${featuredPost.title}`)}`}
-                    className="mt-6 inline-flex rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
-                  >
-                    Request full article
-                  </a>
-                </div>
+                </Link>
               </article>
             ) : null}
 
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white/70 divide-y divide-zinc-200/80 fade-up dark:border-zinc-800 dark:bg-zinc-900/58 dark:divide-zinc-800/90">
               {otherPosts.map((post) => (
                 <article key={post.slug} className="group p-4 sm:p-5">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-[136px_1fr] sm:items-start">
+                  <Link href={`/blog/${post.slug}`} className="grid grid-cols-1 gap-4 sm:grid-cols-[136px_1fr] sm:items-start">
                     <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
                       <Image
                         src={post.coverImage}
@@ -97,12 +96,12 @@ export default function BlogPage() {
                         <span className="text-zinc-300 dark:text-zinc-600">•</span>
                         <span>{post.readTime}</span>
                       </div>
-                      <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                      <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 transition group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
                         {post.title}
                       </h3>
                       <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">{post.excerpt}</p>
                     </div>
-                  </div>
+                  </Link>
                 </article>
               ))}
             </div>

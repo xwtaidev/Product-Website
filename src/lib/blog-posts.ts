@@ -50,3 +50,7 @@ export const blogPosts: BlogPost[] = [
     coverImage: "https://picsum.photos/seed/blog-delivery-playbook/1200/800",
   },
 ];
+
+export function getBlogPostBySlug(slug: string) {
+  return blogPosts.find((post) => post.slug === slug);
+}
