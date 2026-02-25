@@ -37,7 +37,7 @@ export default function SiteHeader() {
           className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-zinc-950 dark:text-zinc-100"
           onClick={() => setMenuOpen(false)}
         >
-          YOURNAME.
+          WAYNE XU.
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
