@@ -136,10 +136,10 @@ export default function BlogPage() {
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <a
-                    href="mailto:hello@example.com"
+                    href="mailto:xwtaidev@gmail.com"
                     className="rounded-full bg-zinc-900 px-4 py-2 text-sm text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
                   >
-                    hello@example.com
+                    xwtaidev@gmail.com
                   </a>
                   <Link
                     href="/work"

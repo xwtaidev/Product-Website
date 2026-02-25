@@ -5,9 +5,9 @@ import { blogPosts } from "@/lib/blog-posts";
 import { projects } from "@/lib/projects";
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com" },
-  { label: "LinkedIn", href: "https://www.linkedin.com" },
-  { label: "Email", href: "mailto:hello@example.com" },
+  { label: "GitHub", href: "https://github.com/xwtaidev" },
+  { label: "X(Twitter)", href: "https://x.com/xwtaidev" },
+  { label: "Email", href: "mailto:xwtaidev@gmail.com" },
 ];
 
 const services = [
@@ -297,13 +297,13 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             <a
-              href="mailto:hello@example.com"
+              href="mailto:xwtaidev@gmail.com"
               className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
             >
-              hello@example.com
+              xwtaidev@gmail.com
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/xwtaidev"
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
@@ -311,12 +311,12 @@ export default function Home() {
               GitHub
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://x.com/xwtaidev"
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
             >
-              LinkedIn
+              X(Twitter)
             </a>
           </div>
         </section>
