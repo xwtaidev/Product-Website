@@ -323,7 +323,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-        © {new Date().getFullYear()} YourName
+        © {new Date().getFullYear()} Wayne Xu
       </footer>
     </div>
   );

@@ -18,13 +18,13 @@ const themeInitScript = `
 export const metadata: Metadata = {
   metadataBase: new URL("https://example.com"),
   title: {
-    default: "YourName · 个人产品展示",
-    template: "%s | YourName",
+    default: "Wayne Xu · 个人产品展示",
+    template: "%s | Wayne Xu",
   },
   description: "聚焦产品设计与实现的个人作品集：案例、方法与可量化结果。",
   keywords: ["产品设计", "作品集", "UX", "Next.js", "Portfolio"],
   openGraph: {
-    title: "YourName · 个人产品展示",
+    title: "Wayne Xu · 个人产品展示",
     description: "聚焦产品设计与实现的个人作品集：案例、方法与可量化结果。",
     url: "https://example.com",
     siteName: "Personal Showcase",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "YourName · 个人产品展示",
+    title: "Wayne Xu · 个人产品展示",
     description: "聚焦产品设计与实现的个人作品集：案例、方法与可量化结果。",
   },
 };
