@@ -1,19 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme-toggle";
+import SiteHeader from "@/components/site-header";
+import { blogPosts } from "@/lib/blog-posts";
 import { projects } from "@/lib/projects";
 
-const navItems = [
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
-
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com" },
-  { label: "LinkedIn", href: "https://www.linkedin.com" },
-  { label: "Email", href: "mailto:hello@example.com" },
+  { label: "GitHub", href: "https://github.com/xwtaidev" },
+  { label: "X(Twitter)", href: "https://x.com/xwtaidev" },
+  { label: "Email", href: "mailto:xwtaidev@gmail.com" },
 ];
 
 const services = [
@@ -76,26 +70,7 @@ export default function Home() {
         <div className="hero-glow hero-glow-bottom" />
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[var(--header-bg)] backdrop-blur-md dark:border-zinc-800/80">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <a href="#" className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-zinc-950 dark:text-zinc-100">
-            YOURNAME.
-          </a>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <nav
-              aria-label="Main navigation"
-              className="flex items-center gap-3 text-[11px] tracking-[0.12em] uppercase text-zinc-600 sm:gap-5 dark:text-zinc-400"
-            >
-              {navItems.map((item) => (
-                <a key={item.label} href={item.href} className="transition hover:text-zinc-950 dark:hover:text-zinc-100">
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            <ThemeToggle className="ml-2 sm:ml-3" />
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
@@ -133,7 +108,15 @@ export default function Home() {
         <section id="work" className="mt-20 fade-up" aria-label="Work">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
-            <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
+              <Link
+                href="/work"
+                className="text-xs tracking-[0.14em] uppercase text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
+              >
+                View all →
+              </Link>
+            </div>
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -160,7 +143,9 @@ export default function Home() {
                     <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
                       <div>
                         <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
-                        <h3 className="mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{project.title}</h3>
+                        <h3 className="font-display mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                          {project.title}
+                        </h3>
                       </div>
                       <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">Case</span>
                     </div>
@@ -170,6 +155,97 @@ export default function Home() {
                 <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section id="blog" className="mt-20 fade-up" aria-label="Blog">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Blog.</h2>
+            <div className="flex items-center gap-3">
+              <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
+                {blogPosts.length} latest writings
+              </span>
+              <Link
+                href="/blog"
+                className="text-xs tracking-[0.14em] uppercase text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
+              >
+                View all →
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1.28fr_0.92fr]">
+            <article className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/70">
+              <div className="relative aspect-[16/9] overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+                <Image
+                  src={blogPosts[0].coverImage}
+                  alt={blogPosts[0].title}
+                  fill
+                  sizes="(min-width: 1024px) 62vw, 100vw"
+                  className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+                <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                  Featured
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="flex flex-wrap items-center gap-2 text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
+                  <span>{blogPosts[0].category}</span>
+                  <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                  <span>{blogPosts[0].publishedAt}</span>
+                  <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                  <span>{blogPosts[0].readTime}</span>
+                </div>
+                <h3 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-3xl">
+                  {blogPosts[0].title}
+                </h3>
+                <p className="mt-4 max-w-[64ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+                  {blogPosts[0].excerpt}
+                </p>
+                <a
+                  href="#contact"
+                  className="mt-6 inline-flex rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+                >
+                  Discuss this topic
+                </a>
+              </div>
+            </article>
+
+            <div className="rounded-2xl border border-zinc-200 bg-white/65 divide-y divide-zinc-200/80 dark:border-zinc-800 dark:bg-zinc-900/55 dark:divide-zinc-800/90">
+              {blogPosts.slice(1).map((post) => (
+                <article
+                  key={post.slug}
+                  className="group px-4 py-4 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/95 sm:px-5"
+                >
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-[112px_1fr] sm:items-start">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
+                      <Image
+                        src={post.coverImage}
+                        alt={post.title}
+                        fill
+                        sizes="(min-width: 1024px) 240px, (min-width: 640px) 120px, 100vw"
+                        className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
+                        <span>{post.category}</span>
+                        <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                        <span>{post.publishedAt}</span>
+                        <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                        <span>{post.readTime}</span>
+                      </div>
+                      <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 transition group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
+                        {post.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">{post.excerpt}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -221,13 +297,13 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             <a
-              href="mailto:hello@example.com"
+              href="mailto:xwtaidev@gmail.com"
               className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-100 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
             >
-              hello@example.com
+              xwtaidev@gmail.com
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/xwtaidev"
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
@@ -235,12 +311,12 @@ export default function Home() {
               GitHub
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://x.com/xwtaidev"
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
             >
-              LinkedIn
+              X(Twitter)
             </a>
           </div>
         </section>
