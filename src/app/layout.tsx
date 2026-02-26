@@ -17,6 +17,10 @@ const themeInitScript = `
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://example.com"),
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
   title: {
     default: "Wayne Xu · 个人产品展示",
     template: "%s | Wayne Xu",

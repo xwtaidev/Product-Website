@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
-import { blogPosts } from "@/lib/blog-posts";
+import { getBlogPosts } from "@/lib/blog-posts";
 import { projects } from "@/lib/projects";
 
 const socialLinks = [
@@ -56,6 +56,11 @@ const headline = [
 ];
 
 export default function Home() {
+  const blogPosts = getBlogPosts();
+  const featuredBlogPost = blogPosts[0];
+  const sideBlogPosts = blogPosts.slice(1, 4);
+  const getSideExcerpt = (excerpt: string) => (excerpt.length > 52 ? `${excerpt.slice(0, 52).trimEnd()}...` : excerpt);
+
   return (
     <div className="min-h-[100dvh] bg-background text-zinc-950 dark:text-zinc-100">
       <a
@@ -174,62 +179,73 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1.28fr_0.92fr]">
-            <article className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/70">
-              <div className="relative aspect-[16/9] overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
-                <Image
-                  src={blogPosts[0].coverImage}
-                  alt={blogPosts[0].title}
-                  fill
-                  sizes="(min-width: 1024px) 62vw, 100vw"
-                  className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-                <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
-                  Featured
+          <div className="mt-8 grid grid-cols-1 gap-5 lg:h-[40rem] lg:grid-cols-[1.28fr_0.92fr]">
+            {featuredBlogPost ? (
+              <article className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-900/70 lg:h-full">
+                <div className="relative aspect-[16/9] overflow-hidden border-b border-zinc-200 dark:border-zinc-800 lg:h-[53%] lg:aspect-auto">
+                  <Image
+                    src={featuredBlogPost.coverImage}
+                    alt={featuredBlogPost.title}
+                    fill
+                    sizes="(min-width: 1024px) 62vw, 100vw"
+                    className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+                  <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                    Featured
+                  </div>
                 </div>
-              </div>
 
-              <div className="p-6">
-                <div className="flex flex-wrap items-center gap-2 text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
-                  <span>{blogPosts[0].category}</span>
-                  <span className="text-zinc-300 dark:text-zinc-600">•</span>
-                  <span>{blogPosts[0].publishedAt}</span>
-                  <span className="text-zinc-300 dark:text-zinc-600">•</span>
-                  <span>{blogPosts[0].readTime}</span>
+                <div className="p-6 lg:flex lg:h-[47%] lg:flex-col">
+                  <div className="flex flex-wrap items-center gap-2 text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
+                    <span>{featuredBlogPost.category}</span>
+                    <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                    <span>{featuredBlogPost.publishedAt}</span>
+                    <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                    <span>{featuredBlogPost.readTime}</span>
+                  </div>
+                  <h3 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-100">
+                    <Link
+                      href={`/blog/${featuredBlogPost.slug}`}
+                      className="transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-zinc-600 dark:hover:text-zinc-300"
+                    >
+                      {featuredBlogPost.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-4 max-w-[64ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
+                    {featuredBlogPost.excerpt}
+                  </p>
+                  <Link
+                    href={`/blog/${featuredBlogPost.slug}`}
+                    className="mt-6 inline-flex w-fit rounded-full border border-zinc-300 px-3 py-1.5 text-xs text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100 lg:mt-auto"
+                  >
+                    阅读该文章
+                  </Link>
                 </div>
-                <h3 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-3xl">
-                  {blogPosts[0].title}
-                </h3>
-                <p className="mt-4 max-w-[64ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-                  {blogPosts[0].excerpt}
-                </p>
-                <a
-                  href="#contact"
-                  className="mt-6 inline-flex rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
-                >
-                  Discuss this topic
-                </a>
-              </div>
-            </article>
+              </article>
+            ) : (
+              <article className="rounded-2xl border border-zinc-200 bg-white/80 p-6 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 lg:h-full">
+                暂无博客内容。
+              </article>
+            )}
 
-            <div className="rounded-2xl border border-zinc-200 bg-white/65 divide-y divide-zinc-200/80 dark:border-zinc-800 dark:bg-zinc-900/55 dark:divide-zinc-800/90">
-              {blogPosts.slice(1).map((post) => (
+            <div className="rounded-2xl border border-zinc-200 bg-white/65 divide-y divide-zinc-200/80 dark:border-zinc-800 dark:bg-zinc-900/55 dark:divide-zinc-800/90 lg:flex lg:h-full lg:flex-col">
+              {sideBlogPosts.map((post) => (
                 <article
                   key={post.slug}
-                  className="group px-4 py-4 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/95 sm:px-5"
+                  className="group overflow-hidden px-4 py-3.5 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/95 sm:px-5 lg:flex-1 lg:min-h-0"
                 >
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-[112px_1fr] sm:items-start">
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-[124px_1fr] sm:items-start lg:grid-cols-[118px_1fr] lg:items-start lg:gap-3">
+                    <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
                       <Image
                         src={post.coverImage}
                         alt={post.title}
                         fill
-                        sizes="(min-width: 1024px) 240px, (min-width: 640px) 120px, 100vw"
+                        sizes="(min-width: 1024px) 220px, (min-width: 640px) 136px, 100vw"
                         className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                       />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2 text-[11px] tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
                         <span>{post.category}</span>
                         <span className="text-zinc-300 dark:text-zinc-600">•</span>
@@ -237,10 +253,15 @@ export default function Home() {
                         <span className="text-zinc-300 dark:text-zinc-600">•</span>
                         <span>{post.readTime}</span>
                       </div>
-                      <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 transition group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
-                        {post.title}
+                      <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          className="transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
+                        >
+                          {post.title}
+                        </Link>
                       </h3>
-                      <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">{post.excerpt}</p>
+                      <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">{getSideExcerpt(post.excerpt)}</p>
                     </div>
                   </div>
                 </article>

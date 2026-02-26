@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export",
+  // Keep static export for production builds, but avoid strict
+  // generateStaticParams checks in dev when content files change.
+  output: process.env.NODE_ENV === "production" ? "export" : undefined,
   images: {
     unoptimized: true,
     remotePatterns: [

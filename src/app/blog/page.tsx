@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
-import { blogPosts } from "@/lib/blog-posts";
+import { getBlogPosts } from "@/lib/blog-posts";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
+  const blogPosts = getBlogPosts();
   const [featuredPost, ...otherPosts] = blogPosts;
   const categories = [...new Set(blogPosts.map((post) => post.category))];
 

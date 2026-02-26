@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Wayne Xu icon">
+  <defs>
+    <linearGradient id="bg" x1="28" y1="28" x2="228" y2="228" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12161c" />
+      <stop offset="1" stop-color="#1e242d" />
+    </linearGradient>
+    <linearGradient id="accent" x1="156" y1="84" x2="206" y2="172" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e5b07b" />
+      <stop offset="1" stop-color="#b57743" />
+    </linearGradient>
+  </defs>
+  <rect x="12" y="12" width="232" height="232" rx="56" fill="url(#bg)" />
+  <rect x="12" y="12" width="232" height="232" rx="56" fill="none" stroke="#2f3744" stroke-width="4" />
+  <path
+    d="M52 82L74 178L98 124L122 178L144 82"
+    fill="none"
+    stroke="#f3f5f7"
+    stroke-width="20"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M156 84L206 172M206 84L156 172"
+    fill="none"
+    stroke="url(#accent)"
+    stroke-width="20"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
