@@ -185,6 +185,18 @@ function resolveCoverImage(slug: string, frontmatterCoverImage: string | undefin
     }
   }
 
+  if (existsSync(PUBLIC_BLOG_DIR)) {
+    const normalizedSlug = slug.toLowerCase();
+    const candidate = readdirSync(PUBLIC_BLOG_DIR).find((fileName) => {
+      const lowerFileName = fileName.toLowerCase();
+      return COVER_EXTENSIONS.some((extension) => lowerFileName === `${normalizedSlug}${extension}`);
+    });
+
+    if (candidate) {
+      return `/blog/${candidate}`;
+    }
+  }
+
   return `https://picsum.photos/seed/blog-${slug}/1200/800`;
 }
 
