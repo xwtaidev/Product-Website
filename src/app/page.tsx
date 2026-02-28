@@ -139,7 +139,11 @@ export default function Home() {
                       fill
                       priority={index === 0}
                       sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
-                      className="h-full w-full object-cover opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                      className={`h-full w-full opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        project.imageFit === "contain"
+                          ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
+                          : "object-cover group-hover:scale-[1.03]"
+                      }`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
                     <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
