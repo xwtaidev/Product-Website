@@ -12,47 +12,47 @@ const socialLinks = [
 
 const services = [
   {
-    title: "Product Strategy",
+    title: "AI Architecture Design",
     description:
-      "定义用户场景、业务目标和验证指标，把方向不清的问题收敛成可执行方案。",
+      "从业务目标反推模型、数据、检索与工具链路，设计可演进的 AI 系统架构。",
   },
   {
-    title: "Experience Design",
+    title: "LLM & Agent Engineering",
     description:
-      "设计信息架构和关键交互路径，确保产品在复杂场景下依旧清晰可用。",
+      "围绕 Agent、RAG、提示策略与工作流编排，构建可上线的智能能力闭环。",
   },
   {
-    title: "Frontend Delivery",
+    title: "Reliability & Security",
     description:
-      "使用 SwiftUI 与 Next.js 实现高保真界面，建立长期可维护的组件体系。",
+      "补齐权限、Secrets、限流、观测与回滚机制，降低 AI 系统在生产环境的风险。",
   },
   {
-    title: "Iteration Systems",
+    title: "AI Delivery Pipeline",
     description:
-      "以数据和反馈驱动迭代节奏，让产品优化持续发生而不是一次性交付。",
+      "建立评测基线、发布流程和反馈回路，让 AI 能力从 PoC 稳定走向持续迭代。",
   },
 ];
 
 const approach = [
   {
-    title: "Define",
-    detail: "先明确目标用户和成功指标，避免在错误方向里做高质量执行。",
+    title: "Architect",
+    detail: "先定义系统边界、关键路径和技术取舍，确保方案可落地、可维护。",
   },
   {
     title: "Validate",
-    detail: "通过低成本原型与快速测试验证关键假设，减少上线风险。",
+    detail: "通过离线评测与灰度验证关键假设，减少模型与流程上线的不确定性。",
   },
   {
-    title: "Scale",
-    detail: "把有效方案沉淀成组件和规则，支撑团队持续迭代。",
+    title: "Operate",
+    detail: "把有效实践沉淀为 runbook、告警与 SOP，支撑团队规模化运行。",
   },
 ];
 
 const headline = [
-  "Designing and shipping",
-  "digital products",
-  "with measurable",
-  "business outcomes.",
+  "Architecting and shipping",
+  "AI systems",
+  "for reliable",
+  "real-world delivery.",
 ];
 
 export default function Home() {
@@ -79,7 +79,7 @@ export default function Home() {
 
       <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
-          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Product Designer & Frontend Builder</p>
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">AI Architect Engineer</p>
           <div className="mt-5 space-y-1 text-zinc-950 dark:text-zinc-100">
             {headline.map((line) => (
               <h1
@@ -92,7 +92,7 @@ export default function Home() {
           </div>
 
           <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            我把产品策略、体验设计和前端实现放在同一条链路里推进，聚焦核心路径的用户价值和业务结果。下面是近期的代表项目、服务范围与协作方式。
+            我专注于 AI 系统架构与工程落地，把模型能力、业务流程和生产稳定性放在同一条交付链路里推进。下面是近期案例、技术文章与可协作方向。
           </p>
 
           <div className="mt-8 flex flex-wrap gap-2">
@@ -139,7 +139,11 @@ export default function Home() {
                       fill
                       priority={index === 0}
                       sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
-                      className="h-full w-full object-cover opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                      className={`h-full w-full opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        project.imageFit === "contain"
+                          ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
+                          : "object-cover group-hover:scale-[1.03]"
+                      }`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
                     <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
@@ -291,7 +295,7 @@ export default function Home() {
             <div>
               <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">About.</h2>
               <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 dark:text-zinc-300 sm:text-2xl sm:leading-10">
-                我关注复杂产品中的核心交互路径，擅长把模糊需求转成可验证的设计与工程方案。目标是让团队在更短周期里交付更稳定、可持续演进的体验。
+                我关注 AI 应用中的核心系统路径，擅长把模糊需求转成可验证的架构与工程方案。目标是在更短周期内交付更稳定、可观测、可持续演进的 AI 能力。
               </p>
             </div>
             <div className="space-y-4">
@@ -314,7 +318,7 @@ export default function Home() {
             SOMETHING CLEAR.
           </h2>
           <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            如果你正在做 0 到 1 产品，或者希望重构关键体验路径，欢迎联系我。我们可以从一次聚焦目标与优先级的讨论开始。
+            如果你正在搭建 Agent / RAG 系统，或希望重构现有 AI 架构与发布流程，欢迎联系我。我们可以从一次聚焦目标、约束与优先级的技术讨论开始。
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             <a

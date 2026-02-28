@@ -6,7 +6,7 @@ import { projects } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "Work",
-  description: "项目列表页：按项目目标、挑战、方案与结果浏览完整案例。",
+  description: "项目列表页：按 AI 系统目标、约束、架构方案与落地结果浏览完整案例。",
 };
 
 export default function WorkPage() {
@@ -32,12 +32,12 @@ export default function WorkPage() {
           </Link>
           <p className="mt-4 text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Work List</p>
           <h1 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl">
-            Product Cases
+            AI Architecture Cases
             <br />
             With Full Context.
           </h1>
           <p className="mt-7 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            这里汇总我近期参与的项目：每个案例都围绕目标、约束、方案与结果展开，便于快速判断是否与你当前的产品阶段匹配。
+            这里汇总我近期参与的 AI 工程项目：每个案例都围绕目标、约束、架构设计、实施路径与结果展开，便于快速判断是否与你当前阶段匹配。
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">
@@ -60,7 +60,11 @@ export default function WorkPage() {
                     fill
                     priority
                     sizes="(min-width: 1024px) 1100px, 100vw"
-                    className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    className={`h-full w-full transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      featuredProject.imageFit === "contain"
+                        ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
+                        : "object-cover group-hover:scale-[1.03]"
+                    }`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/16 to-transparent" />
                   <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
@@ -124,7 +128,11 @@ export default function WorkPage() {
                       alt={project.title}
                       fill
                       sizes="(min-width: 768px) 50vw, 100vw"
-                      className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                      className={`h-full w-full transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        project.imageFit === "contain"
+                          ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
+                          : "object-cover group-hover:scale-[1.03]"
+                      }`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/52 via-black/8 to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">

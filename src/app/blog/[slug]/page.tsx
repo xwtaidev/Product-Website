@@ -535,6 +535,109 @@ function parseListLine(line: string): ParsedListLine | null {
   return null;
 }
 
+function parseTableRow(line: string) {
+  const trimmedLine = line.trim();
+  if (!trimmedLine.includes("|")) {
+    return null;
+  }
+
+  const rowText = trimmedLine.replace(/^\|/, "").replace(/\|$/, "");
+  const cells = rowText.split("|").map((cell) => cell.trim());
+  if (cells.length < 2) {
+    return null;
+  }
+
+  return cells;
+}
+
+function isTableSeparatorLine(line: string) {
+  const cells = parseTableRow(line);
+  if (!cells) {
+    return false;
+  }
+
+  return cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+}
+
+function isTableStarter(lines: string[], index: number) {
+  if (index + 1 >= lines.length) {
+    return false;
+  }
+
+  const headerCells = parseTableRow(lines[index]);
+  if (!headerCells) {
+    return false;
+  }
+
+  const separatorCells = parseTableRow(lines[index + 1]);
+  if (!separatorCells) {
+    return false;
+  }
+
+  return headerCells.length === separatorCells.length && isTableSeparatorLine(lines[index + 1]);
+}
+
+function renderTableBlock(lines: string[], startIndex: number, key: string) {
+  const headerCells = parseTableRow(lines[startIndex]) || [];
+  let index = startIndex + 2;
+  const bodyRows: string[][] = [];
+
+  while (index < lines.length) {
+    const currentLine = lines[index];
+    if (!currentLine.trim()) {
+      break;
+    }
+
+    if (getFenceOpen(currentLine) || /^\s*(#{1,6})\s+/.test(currentLine) || parseListLine(currentLine)) {
+      break;
+    }
+
+    const rowCells = parseTableRow(currentLine);
+    if (!rowCells || rowCells.length !== headerCells.length) {
+      break;
+    }
+
+    bodyRows.push(rowCells);
+    index += 1;
+  }
+
+  const tableNode = (
+    <div key={key} className="mt-8 overflow-x-auto rounded-2xl border border-zinc-200 dark:border-zinc-800">
+      <table className="min-w-full border-collapse text-sm">
+        <thead className="bg-zinc-100/80 dark:bg-zinc-800/70">
+          <tr>
+            {headerCells.map((cell, cellIndex) => (
+              <th
+                key={`${key}-head-${cellIndex}`}
+                className="border-b border-zinc-200 px-4 py-3 text-left font-medium text-zinc-900 dark:border-zinc-700 dark:text-zinc-100"
+                dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(cell) }}
+              />
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {bodyRows.map((rowCells, rowIndex) => (
+            <tr key={`${key}-row-${rowIndex}`} className="bg-white/80 dark:bg-zinc-900/60">
+              {rowCells.map((cell, cellIndex) => (
+                <td
+                  key={`${key}-cell-${rowIndex}-${cellIndex}`}
+                  className="border-t border-zinc-200 px-4 py-3 leading-7 text-zinc-700 dark:border-zinc-800 dark:text-zinc-300"
+                  dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(cell) }}
+                />
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return {
+    nextIndex: index,
+    node: tableNode,
+  };
+}
+
 function findNextNonEmptyLine(lines: string[], startIndex: number) {
   let index = startIndex;
   while (index < lines.length) {
@@ -689,7 +792,7 @@ function renderListBlock(
 }
 
 function isBlockStarter(line: string) {
-  return /^\s*(#{1,6})\s+/.test(line) || getFenceOpen(line) !== null || parseListLine(line) !== null;
+  return /^\s*(#{1,6})\s+/.test(line) || getFenceOpen(line) !== null || parseListLine(line) !== null || parseTableRow(line) !== null;
 }
 
 function renderHeading(level: number, value: string, key: string, headingId?: string) {
@@ -786,6 +889,13 @@ function renderMarkdown(
         blocks.push(listBlock.node);
       }
       index = listBlock.nextIndex;
+      continue;
+    }
+
+    if (isTableStarter(lines, index)) {
+      const tableBlock = renderTableBlock(lines, index, `block-${blockKey++}`);
+      blocks.push(tableBlock.node);
+      index = tableBlock.nextIndex;
       continue;
     }
 

@@ -66,7 +66,9 @@ export default async function ProjectDetailPage({ params }: Props) {
                   fill
                   priority
                   sizes="(min-width: 1024px) 960px, 100vw"
-                  className="h-full w-full object-cover opacity-90"
+                  className={`h-full w-full opacity-90 ${
+                    project.imageFit === "contain" ? "object-contain bg-zinc-950 p-2" : "object-cover"
+                  }`}
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -83,6 +85,24 @@ export default async function ProjectDetailPage({ params }: Props) {
             </div>
 
             <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">{project.overview}</p>
+            {project.websiteUrl ? (
+              <section className="mt-6 rounded-2xl border border-zinc-200 bg-zinc-50/80 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="font-display text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">Website</h2>
+                    <p className="mt-2 break-all text-sm leading-7 text-zinc-700 dark:text-zinc-300">{project.websiteUrl}</p>
+                  </div>
+                  <a
+                    href={project.websiteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex rounded-full border border-zinc-900 bg-zinc-900 px-4 py-2 text-xs tracking-[0.08em] uppercase text-white transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:bg-zinc-800 dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                  >
+                    Visit Website ↗
+                  </a>
+                </div>
+              </section>
+            ) : null}
 
             <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-12">
               <section className="rounded-2xl border border-zinc-200 bg-zinc-50/80 p-5 md:col-span-4 dark:border-zinc-800 dark:bg-zinc-900/60">
