@@ -7,7 +7,7 @@ import { getBlogPosts } from "@/lib/blog-posts";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "文章列表页：围绕产品策略、体验设计、跨端实现与协作流程的实践复盘。",
+  description: "文章列表页：围绕 AI 架构、Agent/RAG 工程、系统稳定性与交付流程的实践复盘。",
 };
 
 export default function BlogPage() {
@@ -37,7 +37,7 @@ export default function BlogPage() {
             From Real Delivery.
           </h1>
           <p className="mt-7 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            这些文章聚焦一线产品交付中的真实问题：如何定义目标、做取舍、协调协作节奏，并把结论转化为可执行的下一步。
+            这些文章聚焦 AI 工程落地中的真实问题：如何做架构取舍、构建 Agent/RAG 流程、保障生产稳定性，并把结论转化为可执行的下一步。
           </p>
         </section>
 

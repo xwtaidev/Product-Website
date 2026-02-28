@@ -127,7 +127,7 @@ export default function BlogPageContent({ blogPosts }: BlogPageContentProps) {
           <section className="rounded-2xl border border-zinc-200 bg-white/82 p-5 dark:border-zinc-800 dark:bg-zinc-900/72">
             <h2 className="font-display text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">Need Deep Dive</h2>
             <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
-              如果你想看完整文章或对应项目背景，我可以把这篇内容和相关案例一起发你，方便直接评估是否可复用。
+              如果你想看完整技术细节或对应架构背景，我可以把这篇内容和相关案例一起发你，方便直接评估是否可复用到你的 AI 系统。
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <a

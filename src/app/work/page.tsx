@@ -6,7 +6,7 @@ import { projects } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "Work",
-  description: "项目列表页：按项目目标、挑战、方案与结果浏览完整案例。",
+  description: "项目列表页：按 AI 系统目标、约束、架构方案与落地结果浏览完整案例。",
 };
 
 export default function WorkPage() {
@@ -32,12 +32,12 @@ export default function WorkPage() {
           </Link>
           <p className="mt-4 text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">Work List</p>
           <h1 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl">
-            Product Cases
+            AI Architecture Cases
             <br />
             With Full Context.
           </h1>
           <p className="mt-7 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            这里汇总我近期参与的项目：每个案例都围绕目标、约束、方案与结果展开，便于快速判断是否与你当前的产品阶段匹配。
+            这里汇总我近期参与的 AI 工程项目：每个案例都围绕目标、约束、架构设计、实施路径与结果展开，便于快速判断是否与你当前阶段匹配。
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">

@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     shortcut: "/icon.svg",
   },
   title: {
-    default: "Wayne Xu · 个人产品展示",
+    default: "Wayne Xu · AI 架构工程师",
     template: "%s | Wayne Xu",
   },
-  description: "聚焦产品设计与实现的个人作品集：案例、方法与可量化结果。",
-  keywords: ["产品设计", "作品集", "UX", "Next.js", "Portfolio"],
+  description: "AI 架构工程师个人网站：聚焦 AI 系统架构、实战案例、工程化方法与技术博客。",
+  keywords: ["AI架构工程师", "AI系统设计", "LLM", "Agent", "RAG", "OpenClaw", "技术博客", "Portfolio"],
   openGraph: {
-    title: "Wayne Xu · 个人产品展示",
-    description: "聚焦产品设计与实现的个人作品集：案例、方法与可量化结果。",
+    title: "Wayne Xu · AI 架构工程师",
+    description: "AI 架构工程师个人网站：聚焦 AI 系统架构、实战案例、工程化方法与技术博客。",
     url: "https://example.com",
     siteName: "Personal Showcase",
     locale: "zh_CN",
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wayne Xu · 个人产品展示",
-    description: "聚焦产品设计与实现的个人作品集：案例、方法与可量化结果。",
+    title: "Wayne Xu · AI 架构工程师",
+    description: "AI 架构工程师个人网站：聚焦 AI 系统架构、实战案例、工程化方法与技术博客。",
   },
 };
 
