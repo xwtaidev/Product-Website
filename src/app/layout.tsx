@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const themeInitScript = `
@@ -53,7 +54,10 @@ export default function RootLayout({
         <meta name="color-scheme" content="light dark" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
