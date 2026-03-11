@@ -51,6 +51,32 @@ const projectOverrides: Partial<
         "Provided reusable OpenClaw execution SOPs for individuals and teams",
       ],
     },
+    mooddiary: {
+      summary:
+        "A low-friction mood journaling app: capture daily mood in five levels with optional notes and voice-to-text input.",
+      overview:
+        "Designed around a lightweight record-and-review loop with three tabs (My Mood / Overview / Settings). The input path supports voice dictation and same-day draft auto-save; the review path offers weekly/monthly mood calendar views with daily record drill-down. Data is primarily stored locally with SwiftData, while CloudKit is off by default and backed by an in-memory fallback configuration.",
+      role: "Product design + iOS development + local data architecture",
+      timeline: "Q1 2026 - Present",
+      challenge:
+        "Mood tracking products often lose users after a few days because recording takes too much effort and historical data is hard to revisit meaningfully.",
+      solution: [
+        "Made five-level mood selection the primary entry point to shorten time-to-record, with notes as an optional step",
+        "Added voice-to-text and same-day draft auto-save in My Mood to reduce typing friction and interruption loss",
+        "Implemented weekly/monthly mood calendar switching in Overview with per-day detail viewing for trend readability",
+        "Used local SwiftData persistence as default, kept CloudKit disabled by default with a manual sync entry, and added an in-memory fallback store configuration",
+      ],
+      impact: [
+        "Lower daily journaling friction",
+        "Improved continuity of mood check-ins",
+        "Enabled periodic emotional trend review",
+      ],
+      outcomes: [
+        "Delivered a closed loop experience from quick logging to periodic review with controllable sync behavior",
+        "Preserved low cognitive load while keeping the core feature set complete",
+        "Built a stable data foundation for future insights and personalized reminder features",
+      ],
+    },
   },
 };
 
