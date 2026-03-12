@@ -1,9 +1,9 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { CSSProperties, MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { type SupportedLocale, withLocalePath } from "@/lib/i18n";
 import { getProjectStatusLabel } from "@/lib/localized-content";
 import type { Project } from "@/lib/projects";
@@ -122,6 +122,11 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
   const [stackFilter, setStackFilter] = useState("all");
   const [activeSlug, setActiveSlug] = useState<string | null>(projects[0]?.slug ?? null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const isHoveringPreviewRef = useRef(false);
+  const pointerOffsetRef = useRef({ x: 0, y: 0 });
+  const rotationRef = useRef({ x: -10, y: 0, baseY: 0 });
 
   const categoryOptions = useMemo(
     () => Array.from(new Set(projects.map((project) => project.category))).sort((a, b) => a.localeCompare(b)),
@@ -276,7 +281,10 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     "--work-preview-a": previewPalette[0],
     "--work-preview-b": previewPalette[1],
     "--work-preview-c": previewPalette[2],
+    "--cylinder-rot-x": "-10deg",
+    "--cylinder-rot-y": "0deg",
   } as CSSProperties;
+  const cylinderProjects = projects;
 
   const listCountLabel = locale === "zh-CN" ? `${filteredProjects.length} 个项目` : `${filteredProjects.length} projects`;
   const laneCountLabel = locale === "zh-CN" ? `${detailLanes.length} 条线索` : `${detailLanes.length} threads`;
@@ -318,6 +326,59 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     setStackFilter("all");
     setIsDetailOpen(false);
   };
+
+  const handlePreviewMouseMove = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    pointerOffsetRef.current = {
+      x: Math.max(-40, Math.min(40, x * 86)),
+      y: Math.max(-10, Math.min(10, y * 24)),
+    };
+  };
+
+  const handlePreviewMouseEnter = () => {
+    isHoveringPreviewRef.current = true;
+  };
+
+  const handlePreviewMouseLeave = () => {
+    isHoveringPreviewRef.current = false;
+  };
+
+  useEffect(() => {
+    const animate = () => {
+      const previewNode = previewRef.current;
+      if (previewNode) {
+        const rotation = rotationRef.current;
+
+        if (isHoveringPreviewRef.current) {
+          rotation.baseY += 0.06;
+        } else {
+          rotation.baseY += 0.14;
+          pointerOffsetRef.current.x *= 0.9;
+          pointerOffsetRef.current.y *= 0.9;
+        }
+
+        const targetY = rotation.baseY + pointerOffsetRef.current.x;
+        const targetX = -10 + pointerOffsetRef.current.y;
+
+        rotation.y += (targetY - rotation.y) * 0.08;
+        rotation.x += (targetX - rotation.x) * 0.08;
+
+        previewNode.style.setProperty("--cylinder-rot-y", `${rotation.y.toFixed(2)}deg`);
+        previewNode.style.setProperty("--cylinder-rot-x", `${rotation.x.toFixed(2)}deg`);
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
   return (
     <section className="fade-up">
@@ -574,29 +635,51 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
           </section>
 
           <section className="work-jobs-right">
-            <div className="work-jobs-preview" style={previewStyle} data-mode={mode}>
+            <div
+              ref={previewRef}
+              className="work-jobs-preview"
+              style={previewStyle}
+              data-mode={mode}
+              onMouseMove={handlePreviewMouseMove}
+              onMouseEnter={handlePreviewMouseEnter}
+              onMouseLeave={handlePreviewMouseLeave}
+            >
               <div className="work-preview-noise" />
-              <div className="work-preview-device work-preview-device-left" />
-              <div className="work-preview-device work-preview-device-right" />
+              <div className="work-cylinder-stage">
+                <div className="work-cylinder">
+                  {cylinderProjects.map((project, index) => {
+                    const angle = (360 / cylinderProjects.length) * index;
+                    const isActive = previewProject?.slug === project.slug;
+                    const itemStyle = { "--item-angle": `${angle}deg` } as CSSProperties;
 
-              <div className={`work-preview-device work-preview-device-main ${mode === "detail" ? "is-detail" : ""}`}>
-                {previewProject && mode === "detail" ? (
-                  <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-zinc-300/85 bg-zinc-100 shadow-[0_20px_32px_-24px_rgba(24,24,27,0.68)] dark:border-zinc-600/70 dark:bg-zinc-900/80 dark:shadow-[0_24px_38px_-24px_rgba(0,0,0,0.72)]">
-                    <Image
-                      key={previewProject.slug}
-                      src={previewProject.coverImage}
-                      alt={previewProject.title}
-                      fill
-                      sizes="(min-width: 1280px) 340px, 60vw"
-                      className={`work-preview-image ${previewProject.imageFit === "contain" ? "object-contain p-4" : "object-cover"}`}
-                    />
-                  </div>
-                ) : (
-                  <div className="work-preview-placeholder" />
-                )}
+                    return (
+                      <button
+                        key={project.slug}
+                        type="button"
+                        className={`work-cylinder-item ${isActive ? "is-active" : ""}`}
+                        style={itemStyle}
+                        onClick={() => handleSelectProject(project.slug)}
+                        aria-label={project.title}
+                      >
+                        <span className="work-cylinder-item-inner">
+                          <span className="work-cylinder-image-wrap">
+                            <Image
+                              src={project.coverImage}
+                              alt={project.title}
+                              fill
+                              sizes="180px"
+                              className={project.imageFit === "contain" ? "object-contain p-2.5" : "object-cover"}
+                            />
+                          </span>
+                          <span className="work-cylinder-title">{project.title}</span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              {previewProject && mode === "detail" ? (
+              {previewProject ? (
                 <div className="work-preview-meta">
                   <span>{copy.previewLabel}</span>
                   <p>{previewProject.title}</p>
