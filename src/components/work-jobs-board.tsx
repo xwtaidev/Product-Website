@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, MouseEvent } from "react";
+import type { CSSProperties, PointerEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -65,6 +65,10 @@ const previewPalettes = [
   ["rgba(178, 168, 149, 0.35)", "rgba(146, 160, 147, 0.28)", "rgba(236, 236, 231, 0.9)"],
 ] as const;
 
+function normalizeAngle(value: number) {
+  return ((value + 180) % 360 + 360) % 360 - 180;
+}
+
 function hashString(input: string) {
   let hash = 0;
   for (let i = 0; i < input.length; i += 1) {
@@ -124,16 +128,23 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const isHoveringPreviewRef = useRef(false);
-  const pointerOffsetRef = useRef({ x: 0, y: 0 });
-  const rotationRef = useRef({ x: -10, y: 0, baseY: 0 });
+  const rotationTargetRef = useRef(0);
+  const tiltTargetRef = useRef(-2);
+  const isDraggingRef = useRef(false);
+  const movedDuringDragRef = useRef(false);
+  const suppressClickRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartRotationRef = useRef(0);
+  const [ringRotation, setRingRotation] = useState(0);
+  const [ringTilt, setRingTilt] = useState(-2);
+  const [viewerSize, setViewerSize] = useState({ width: 0, height: 0 });
 
   const categoryOptions = useMemo(
-    () => Array.from(new Set(projects.map((project) => project.category))).sort((a, b) => a.localeCompare(b)),
+    () => Array.from(new Set(projects.map((project) => project.category))),
     [projects],
   );
   const roleOptions = useMemo(
-    () => Array.from(new Set(projects.map((project) => project.role))).sort((a, b) => a.localeCompare(b)),
+    () => Array.from(new Set(projects.map((project) => project.role))),
     [projects],
   );
   const stackOptions = useMemo(
@@ -144,7 +155,7 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
             project.tags.map((tag) => tag.trim()).filter((tag) => tag.length > 0),
           ),
         ),
-      ).sort((a, b) => a.localeCompare(b)),
+      ),
     [projects],
   );
 
@@ -281,10 +292,90 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     "--work-preview-a": previewPalette[0],
     "--work-preview-b": previewPalette[1],
     "--work-preview-c": previewPalette[2],
-    "--cylinder-rot-x": "-10deg",
-    "--cylinder-rot-y": "0deg",
   } as CSSProperties;
   const cylinderProjects = projects;
+  const cylinderGeometry = useMemo(() => {
+    const width = viewerSize.width || 760;
+    const height = viewerSize.height || 700;
+    const ratio = 2.17;
+    const phoneHFromWidth = Math.min(660, width * 0.78);
+    const phoneH = Math.max(320, Math.min(phoneHFromWidth, height * 0.9));
+    const phoneW = Math.max(128, phoneH / ratio);
+    const radius = Math.max(260, Math.min(760, width * 0.875));
+    return { phoneW, phoneH, radius };
+  }, [viewerSize.height, viewerSize.width]);
+
+  const cylinderCards = useMemo(() => {
+    if (cylinderProjects.length === 0) {
+      return [];
+    }
+
+    const step = 360 / cylinderProjects.length;
+    return cylinderProjects.map((project, index) => {
+      const angle = normalizeAngle(index * step + ringRotation);
+      const absAngle = Math.abs(angle);
+
+      let scale = 1;
+      if (absAngle <= 30) {
+        scale = 1 - (absAngle / 30) * 0.04;
+      } else if (absAngle <= 60) {
+        scale = 0.96 - ((absAngle - 30) / 30) * 0.07;
+      } else if (absAngle <= 90) {
+        scale = 0.89 - ((absAngle - 60) / 30) * 0.03;
+      } else {
+        scale = 0.86;
+      }
+
+      let brightness = 1;
+      if (absAngle <= 30) {
+        brightness = 1 - (absAngle / 30) * 0.15;
+      } else if (absAngle <= 60) {
+        brightness = 0.85 - ((absAngle - 30) / 30) * 0.15;
+      } else if (absAngle <= 90) {
+        brightness = 0.7 - ((absAngle - 60) / 30) * 0.1;
+      } else {
+        brightness = 0.6;
+      }
+
+      let opacity = 1;
+      if (absAngle > 72) {
+        opacity = Math.max(0, 1 - (absAngle - 72) / 20);
+      }
+      if (absAngle > 95) {
+        opacity = 0;
+      }
+
+      const itemStyle = {
+        width: `${cylinderGeometry.phoneW.toFixed(2)}px`,
+        height: `${cylinderGeometry.phoneH.toFixed(2)}px`,
+        top: `${(-cylinderGeometry.phoneH / 2).toFixed(2)}px`,
+        left: `${(-cylinderGeometry.phoneW / 2).toFixed(2)}px`,
+        opacity: opacity.toFixed(3),
+        transform: `translateX(0px) rotateY(${angle.toFixed(2)}deg) translateZ(${cylinderGeometry.radius.toFixed(2)}px) scale(${scale.toFixed(3)})`,
+        filter: `brightness(${brightness.toFixed(3)})`,
+        pointerEvents: opacity > 0.04 ? "auto" : "none",
+        willChange: "transform, opacity",
+      } as CSSProperties;
+
+      return {
+        project,
+        itemStyle,
+        isActive: previewProject?.slug === project.slug,
+      };
+    });
+  }, [cylinderGeometry.phoneH, cylinderGeometry.phoneW, cylinderGeometry.radius, cylinderProjects, previewProject?.slug, ringRotation]);
+
+  useEffect(() => {
+    if (!previewProject || cylinderProjects.length === 0 || isDraggingRef.current) {
+      return;
+    }
+    const selectedIndexInCylinder = cylinderProjects.findIndex((project) => project.slug === previewProject.slug);
+    if (selectedIndexInCylinder < 0) {
+      return;
+    }
+    const step = 360 / cylinderProjects.length;
+    rotationTargetRef.current = -selectedIndexInCylinder * step;
+  }, [cylinderProjects, previewProject]);
 
   const listCountLabel = locale === "zh-CN" ? `${filteredProjects.length} 个项目` : `${filteredProjects.length} projects`;
   const laneCountLabel = locale === "zh-CN" ? `${detailLanes.length} 条线索` : `${detailLanes.length} threads`;
@@ -327,47 +418,81 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     setIsDetailOpen(false);
   };
 
-  const handlePreviewMouseMove = (event: MouseEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    pointerOffsetRef.current = {
-      x: Math.max(-40, Math.min(40, x * 86)),
-      y: Math.max(-10, Math.min(10, y * 24)),
-    };
+  const handlePreviewPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    isDraggingRef.current = true;
+    movedDuringDragRef.current = false;
+    dragStartXRef.current = event.clientX;
+    dragStartRotationRef.current = rotationTargetRef.current;
+    event.currentTarget.setPointerCapture(event.pointerId);
   };
 
-  const handlePreviewMouseEnter = () => {
-    isHoveringPreviewRef.current = true;
+  const handlePreviewPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragStartXRef.current;
+    if (Math.abs(deltaX) > 4) {
+      movedDuringDragRef.current = true;
+    }
+    rotationTargetRef.current = dragStartRotationRef.current + deltaX * 0.42;
+    tiltTargetRef.current = -2;
   };
 
-  const handlePreviewMouseLeave = () => {
-    isHoveringPreviewRef.current = false;
+  const handlePreviewPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+      suppressClickRef.current = movedDuringDragRef.current;
+      movedDuringDragRef.current = false;
+    }
+  };
+
+  const handlePreviewPointerLeave = () => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      suppressClickRef.current = movedDuringDragRef.current;
+      movedDuringDragRef.current = false;
+    }
+  };
+
+  const handlePreviewCardClick = (slug: string) => {
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+    handleSelectProject(slug);
   };
 
   useEffect(() => {
-    const animate = () => {
-      const previewNode = previewRef.current;
-      if (previewNode) {
-        const rotation = rotationRef.current;
-
-        if (isHoveringPreviewRef.current) {
-          rotation.baseY += 0.06;
-        } else {
-          rotation.baseY += 0.14;
-          pointerOffsetRef.current.x *= 0.9;
-          pointerOffsetRef.current.y *= 0.9;
-        }
-
-        const targetY = rotation.baseY + pointerOffsetRef.current.x;
-        const targetX = -10 + pointerOffsetRef.current.y;
-
-        rotation.y += (targetY - rotation.y) * 0.08;
-        rotation.x += (targetX - rotation.x) * 0.08;
-
-        previewNode.style.setProperty("--cylinder-rot-y", `${rotation.y.toFixed(2)}deg`);
-        previewNode.style.setProperty("--cylinder-rot-x", `${rotation.x.toFixed(2)}deg`);
+    const updateMetrics = () => {
+      if (!previewRef.current) {
+        return;
       }
+      const rect = previewRef.current.getBoundingClientRect();
+      setViewerSize({ width: rect.width, height: rect.height });
+    };
+
+    updateMetrics();
+    const observer = new ResizeObserver(() => updateMetrics());
+    if (previewRef.current) {
+      observer.observe(previewRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let currentRotation = 0;
+    let currentTilt = -2;
+
+    const animate = () => {
+      currentRotation += (rotationTargetRef.current - currentRotation) * 0.12;
+      currentTilt += (tiltTargetRef.current - currentTilt) * 0.12;
+      setRingRotation(currentRotation);
+      setRingTilt(currentTilt);
 
       animationFrameRef.current = requestAnimationFrame(animate);
     };
@@ -640,42 +765,37 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
               className="work-jobs-preview"
               style={previewStyle}
               data-mode={mode}
-              onMouseMove={handlePreviewMouseMove}
-              onMouseEnter={handlePreviewMouseEnter}
-              onMouseLeave={handlePreviewMouseLeave}
+              onPointerDown={handlePreviewPointerDown}
+              onPointerMove={handlePreviewPointerMove}
+              onPointerUp={handlePreviewPointerUp}
+              onPointerCancel={handlePreviewPointerUp}
+              onPointerLeave={handlePreviewPointerLeave}
             >
               <div className="work-preview-noise" />
-              <div className="work-cylinder-stage">
-                <div className="work-cylinder">
-                  {cylinderProjects.map((project, index) => {
-                    const angle = (360 / cylinderProjects.length) * index;
-                    const isActive = previewProject?.slug === project.slug;
-                    const itemStyle = { "--item-angle": `${angle}deg` } as CSSProperties;
-
-                    return (
+              <div className="work-cylinder-viewer">
+                <div className="work-cylinder-layer">
+                  <div className="work-cylinder-ring" style={{ "--ring-tilt": `${ringTilt.toFixed(2)}deg` } as CSSProperties}>
+                    {cylinderCards.map(({ project, itemStyle, isActive }) => (
                       <button
                         key={project.slug}
                         type="button"
-                        className={`work-cylinder-item ${isActive ? "is-active" : ""}`}
+                        className={`work-cylinder-post ${isActive ? "is-active" : ""}`}
                         style={itemStyle}
-                        onClick={() => handleSelectProject(project.slug)}
+                        onClick={() => handlePreviewCardClick(project.slug)}
                         aria-label={project.title}
                       >
-                        <span className="work-cylinder-item-inner">
-                          <span className="work-cylinder-image-wrap">
-                            <Image
-                              src={project.coverImage}
-                              alt={project.title}
-                              fill
-                              sizes="180px"
-                              className={project.imageFit === "contain" ? "object-contain p-2.5" : "object-cover"}
-                            />
-                          </span>
-                          <span className="work-cylinder-title">{project.title}</span>
+                        <span className="work-cylinder-post-inner">
+                          <Image
+                            src={project.coverImage}
+                            alt={project.title}
+                            fill
+                            sizes="304px"
+                            className={project.imageFit === "contain" ? "object-contain p-4" : "object-cover"}
+                          />
                         </span>
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
               </div>
 
