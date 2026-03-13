@@ -3,7 +3,7 @@
 import type { CSSProperties, PointerEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type SupportedLocale, withLocalePath } from "@/lib/i18n";
 import { getProjectStatusLabel } from "@/lib/localized-content";
 import type { Project } from "@/lib/projects";
@@ -125,6 +125,7 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
   const [roleFilter, setRoleFilter] = useState("all");
   const [stackFilter, setStackFilter] = useState("all");
   const [activeSlug, setActiveSlug] = useState<string | null>(projects[0]?.slug ?? null);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
@@ -217,7 +218,12 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     [filteredProjects, resolvedActiveSlug],
   );
 
-  const previewProject = selectedProject ?? filteredProjects[0] ?? projects[0] ?? null;
+  const hoveredProject = useMemo(
+    () => (hoveredSlug ? filteredProjects.find((project) => project.slug === hoveredSlug) ?? null : null),
+    [filteredProjects, hoveredSlug],
+  );
+
+  const previewProject = hoveredProject ?? selectedProject ?? filteredProjects[0] ?? projects[0] ?? null;
   const mode = isDetailOpen && selectedProject ? "detail" : "list";
 
   const selectedIndex = selectedProject ? filteredProjects.findIndex((project) => project.slug === selectedProject.slug) : -1;
@@ -294,6 +300,22 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     "--work-preview-c": previewPalette[2],
   } as CSSProperties;
   const cylinderProjects = projects;
+
+  const rotateToSlug = useCallback(
+    (slug: string) => {
+      if (isDraggingRef.current || cylinderProjects.length === 0) {
+        return;
+      }
+      const selectedIndexInCylinder = cylinderProjects.findIndex((project) => project.slug === slug);
+      if (selectedIndexInCylinder < 0) {
+        return;
+      }
+      const step = 360 / cylinderProjects.length;
+      rotationTargetRef.current = -selectedIndexInCylinder * step;
+    },
+    [cylinderProjects],
+  );
+
   const cylinderGeometry = useMemo(() => {
     const width = viewerSize.width || 760;
     const height = viewerSize.height || 700;
@@ -369,13 +391,8 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     if (!previewProject || cylinderProjects.length === 0 || isDraggingRef.current) {
       return;
     }
-    const selectedIndexInCylinder = cylinderProjects.findIndex((project) => project.slug === previewProject.slug);
-    if (selectedIndexInCylinder < 0) {
-      return;
-    }
-    const step = 360 / cylinderProjects.length;
-    rotationTargetRef.current = -selectedIndexInCylinder * step;
-  }, [cylinderProjects, previewProject]);
+    rotateToSlug(previewProject.slug);
+  }, [cylinderProjects.length, previewProject, rotateToSlug]);
 
   const listCountLabel = locale === "zh-CN" ? `${filteredProjects.length} 个项目` : `${filteredProjects.length} projects`;
   const laneCountLabel = locale === "zh-CN" ? `${detailLanes.length} 条线索` : `${detailLanes.length} threads`;
@@ -415,7 +432,23 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     setStatusFilter("all");
     setRoleFilter("all");
     setStackFilter("all");
+    setHoveredSlug(null);
     setIsDetailOpen(false);
+  };
+
+  const handleListRowPointerEnter = (event: PointerEvent<HTMLButtonElement>, slug: string) => {
+    if (event.pointerType && event.pointerType !== "mouse") {
+      return;
+    }
+    setHoveredSlug(slug);
+    rotateToSlug(slug);
+  };
+
+  const handleListPointerLeave = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType && event.pointerType !== "mouse") {
+      return;
+    }
+    setHoveredSlug(null);
   };
 
   const handlePreviewPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -630,14 +663,15 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
               </button>
             </header>
 
-            <div className="work-jobs-scroll">
+            <div className="work-jobs-scroll" onPointerLeave={handleListPointerLeave}>
               {filteredProjects.map((project, index) => {
-                const active = isDetailOpen && project.slug === resolvedActiveSlug;
+                const active = (isDetailOpen && project.slug === resolvedActiveSlug) || project.slug === hoveredSlug;
                 return (
                   <button
                     key={project.slug}
                     type="button"
                     onClick={() => handleSelectProject(project.slug)}
+                    onPointerEnter={(event) => handleListRowPointerEnter(event, project.slug)}
                     className={`work-jobs-row ${active ? "is-active" : ""}`}
                     style={{ animationDelay: `${Math.min(index * 60, 360)}ms` }}
                   >
