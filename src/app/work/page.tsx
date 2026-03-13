@@ -21,6 +21,8 @@ const workCopyByLocale: Record<SupportedLocale, WorkCopy> = {
     title: "作品",
     description: "作品页：参考 jobs board 交互结构，使用三栏工作台展示每个项目。",
     board: {
+      pageTitle: "Work",
+      pageSubtitle: "用 jobs 风格浏览项目，悬停左侧列表即可联动右侧预览并查看完整细节。",
       backHome: "← 返回首页",
       boardTag: "Work Jobs",
       boardTitle: "Work",
@@ -54,6 +56,8 @@ const workCopyByLocale: Record<SupportedLocale, WorkCopy> = {
     title: "Work",
     description: "Work page redesigned as a jobs-board workspace with a three-column layout and motion transitions.",
     board: {
+      pageTitle: "Work",
+      pageSubtitle: "Browse projects in a jobs-style board. Hover the list and inspect each case in context.",
       backHome: "← Back to home",
       boardTag: "Work Jobs",
       boardTitle: "Work",

@@ -9,6 +9,8 @@ import { getProjectStatusLabel } from "@/lib/localized-content";
 import type { Project } from "@/lib/projects";
 
 export type WorkJobsCopy = {
+  pageTitle: string;
+  pageSubtitle: string;
   backHome: string;
   boardTag: string;
   boardTitle: string;
@@ -101,14 +103,6 @@ function ArrowIcon() {
   );
 }
 
-function DownIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 16 16" className="h-4 w-4">
-      <path d="M4.2 6.2L8 10L11.8 6.2" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function ExternalArrowIcon() {
   return (
     <svg aria-hidden="true" viewBox="0 0 16 16" className="h-4 w-4">
@@ -119,11 +113,6 @@ function ExternalArrowIcon() {
 }
 
 export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJobsBoardProps) {
-  const [query, setQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState<Project["status"] | "all">("all");
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [stackFilter, setStackFilter] = useState("all");
   const [activeSlug, setActiveSlug] = useState<string | null>(projects[0]?.slug ?? null);
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -140,71 +129,7 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
   const [ringTilt, setRingTilt] = useState(-2);
   const [viewerSize, setViewerSize] = useState({ width: 0, height: 0 });
 
-  const categoryOptions = useMemo(
-    () => Array.from(new Set(projects.map((project) => project.category))),
-    [projects],
-  );
-  const roleOptions = useMemo(
-    () => Array.from(new Set(projects.map((project) => project.role))),
-    [projects],
-  );
-  const stackOptions = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          projects.flatMap((project) =>
-            project.tags.map((tag) => tag.trim()).filter((tag) => tag.length > 0),
-          ),
-        ),
-      ),
-    [projects],
-  );
-
-  const statusOptions: Array<{ value: Project["status"] | "all"; label: string }> = [
-    { value: "all", label: copy.filterStatus },
-    { value: "已上线", label: getProjectStatusLabel("已上线", locale) },
-    { value: "持续迭代", label: getProjectStatusLabel("持续迭代", locale) },
-    { value: "内部使用", label: getProjectStatusLabel("内部使用", locale) },
-  ];
-
-  const filteredProjects = useMemo(() => {
-    const keyword = query.trim().toLowerCase();
-
-    return projects.filter((project) => {
-      if (categoryFilter !== "all" && project.category !== categoryFilter) {
-        return false;
-      }
-      if (statusFilter !== "all" && project.status !== statusFilter) {
-        return false;
-      }
-      if (roleFilter !== "all" && project.role !== roleFilter) {
-        return false;
-      }
-      if (stackFilter !== "all" && !project.tags.includes(stackFilter)) {
-        return false;
-      }
-
-      if (!keyword) {
-        return true;
-      }
-
-      const statusText = getProjectStatusLabel(project.status, locale);
-      const textPool = [
-        project.title,
-        project.category,
-        project.summary,
-        project.overview,
-        project.challenge,
-        project.role,
-        project.tags.join(" "),
-        statusText,
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      return textPool.includes(keyword);
-    });
-  }, [categoryFilter, locale, projects, query, roleFilter, stackFilter, statusFilter]);
+  const filteredProjects = projects;
 
   const resolvedActiveSlug = useMemo(() => {
     if (activeSlug && filteredProjects.some((project) => project.slug === activeSlug)) {
@@ -426,16 +351,6 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
     setIsDetailOpen(true);
   };
 
-  const handleClearFilters = () => {
-    setQuery("");
-    setCategoryFilter("all");
-    setStatusFilter("all");
-    setRoleFilter("all");
-    setStackFilter("all");
-    setHoveredSlug(null);
-    setIsDetailOpen(false);
-  };
-
   const handleListRowPointerEnter = (event: PointerEvent<HTMLButtonElement>, slug: string) => {
     if (event.pointerType && event.pointerType !== "mouse") {
       return;
@@ -539,7 +454,12 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
   }, []);
 
   return (
-    <section className="fade-up">
+    <section className="fade-up work-jobs-shell">
+      <header className="work-jobs-page-header">
+        <h1 className="work-jobs-page-title font-display">{copy.pageTitle}</h1>
+        <p className="work-jobs-page-subtitle">{copy.pageSubtitle}</p>
+      </header>
+
       <div className="work-jobs-meta">
         <div className="flex items-center gap-3">
           <Link
@@ -559,81 +479,6 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
         </Link>
       </div>
 
-      <div className="work-jobs-controls">
-        <label className="work-jobs-search">
-          <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4 text-zinc-500 dark:text-zinc-400">
-            <circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
-            <path d="M12.5 12.5L16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-          </svg>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={copy.searchPlaceholder}
-            aria-label={copy.searchPlaceholder}
-          />
-          <span className="work-jobs-search-hint">{copy.searchHint}</span>
-        </label>
-
-        <label className="work-jobs-select">
-          <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
-            <option value="all">{copy.filterCategory}</option>
-            {categoryOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <span aria-hidden="true" className="work-jobs-select-arrow">
-            <DownIcon />
-          </span>
-        </label>
-
-        <label className="work-jobs-select">
-          <select
-            value={statusFilter}
-            onChange={(event) => setStatusFilter(event.target.value as Project["status"] | "all")}
-          >
-            {statusOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <span aria-hidden="true" className="work-jobs-select-arrow">
-            <DownIcon />
-          </span>
-        </label>
-
-        <label className="work-jobs-select">
-          <select value={roleFilter} onChange={(event) => setRoleFilter(event.target.value)}>
-            <option value="all">{copy.filterRole}</option>
-            {roleOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <span aria-hidden="true" className="work-jobs-select-arrow">
-            <DownIcon />
-          </span>
-        </label>
-
-        <label className="work-jobs-select">
-          <select value={stackFilter} onChange={(event) => setStackFilter(event.target.value)}>
-            <option value="all">{copy.filterStack}</option>
-            {stackOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <span aria-hidden="true" className="work-jobs-select-arrow">
-            <DownIcon />
-          </span>
-        </label>
-      </div>
-
       <div className="work-jobs-stats">
         <span>{stats.totalStat}</span>
         <span>{stats.launchedStat}</span>
@@ -644,7 +489,7 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
         <div className="work-jobs-grid" data-mode={mode}>
           <aside className="work-jobs-left">
             <header className="work-jobs-header">
-              <h2 className="font-display text-xl tracking-tight">{copy.boardTitle}</h2>
+              <h2 className="font-display text-xl tracking-tight work-jobs-panel-title">{copy.boardTitle}</h2>
               <button
                 type="button"
                 onClick={() => {
@@ -699,9 +544,6 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
                 <div className="work-jobs-empty">
                   <h3>{copy.noResultTitle}</h3>
                   <p>{copy.noResultHint}</p>
-                  <button type="button" onClick={handleClearFilters}>
-                    {copy.clearFilters}
-                  </button>
                 </div>
               ) : null}
             </div>
@@ -720,7 +562,9 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
                       <p className="text-xs tracking-[0.1em] uppercase text-zinc-500 dark:text-zinc-400">
                         {getProjectStatusLabel(selectedProject.status, locale)}
                       </p>
-                      <h3 className="font-display mt-1 truncate text-[1.35rem] tracking-tight">{selectedProject.title}</h3>
+                      <h3 className="font-display mt-1 truncate text-[1.35rem] tracking-tight work-jobs-detail-title">
+                        {selectedProject.title}
+                      </h3>
                     </div>
                     <button type="button" onClick={() => setIsDetailOpen(false)} className="work-jobs-esc">
                       {copy.closeDetail}
