@@ -10,9 +10,15 @@ import BlogToc from "@/components/blog-toc";
 import CodeBlock from "@/components/code-block";
 import SiteHeader from "@/components/site-header";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/blog-posts";
+import { defaultLocale, type SupportedLocale, withLocalePath } from "@/lib/i18n";
 
-type Props = {
+type PageProps = {
   params: Promise<{ slug: string }>;
+};
+
+type BlogDetailViewProps = {
+  slug: string;
+  locale?: SupportedLocale;
 };
 
 type TocHeading = {
@@ -34,23 +40,42 @@ type MarkdownImage = {
 
 const BLOG_IMAGE_FALLBACK_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif"];
 
-export async function generateStaticParams() {
+const blogDetailCopyByLocale: Record<SupportedLocale, { notFoundTitle: string; backToBlog: string }> = {
+  "zh-CN": {
+    notFoundTitle: "文章不存在",
+    backToBlog: "← 返回博客",
+  },
+  en: {
+    notFoundTitle: "Post Not Found",
+    backToBlog: "← Back to blog",
+  },
+};
+
+export function getBlogStaticParams() {
   const blogPosts = getBlogPosts();
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+export async function buildBlogMetadata(slug: string, locale: SupportedLocale): Promise<Metadata> {
   const post = getBlogPostBySlug(slug);
 
   if (!post) {
-    return { title: "文章不存在" };
+    return { title: blogDetailCopyByLocale[locale].notFoundTitle };
   }
 
   return {
     title: post.title,
     description: post.excerpt,
   };
+}
+
+export function generateStaticParams() {
+  return getBlogStaticParams();
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  return buildBlogMetadata(slug, defaultLocale);
 }
 
 async function getMarkdownBody(contentFile?: string) {
@@ -952,9 +977,9 @@ function renderMarkdown(
   return blocks;
 }
 
-export default async function BlogDetailPage({ params }: Props) {
-  const { slug } = await params;
+export async function BlogDetailPageView({ slug, locale = defaultLocale }: BlogDetailViewProps) {
   const post = getBlogPostBySlug(slug);
+  const copy = blogDetailCopyByLocale[locale];
 
   if (!post) {
     notFound();
@@ -972,14 +997,14 @@ export default async function BlogDetailPage({ params }: Props) {
         <div className="hero-glow hero-glow-bottom" />
       </div>
 
-      <SiteHeader />
+      <SiteHeader locale={locale} />
 
-      <main className="mx-auto w-full max-w-[82rem] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+      <main className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <Link
-          href="/blog"
+          href={withLocalePath(locale, "/blog")}
           className="text-xs tracking-[0.12em] uppercase text-zinc-600 transition hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
-          ← Back to blog
+          {copy.backToBlog}
         </Link>
 
         <div
@@ -1037,4 +1062,9 @@ export default async function BlogDetailPage({ params }: Props) {
       </footer>
     </div>
   );
+}
+
+export default async function BlogDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  return <BlogDetailPageView slug={slug} locale={defaultLocale} />;
 }

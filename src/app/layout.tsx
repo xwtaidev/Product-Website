@@ -10,8 +10,11 @@ const themeInitScript = `
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     const theme = storedTheme === "dark" || storedTheme === "light" ? storedTheme : systemTheme;
     const root = document.documentElement;
+    const path = window.location.pathname || "/";
+    const isEnglish = path === "/en" || path.startsWith("/en/");
     root.classList.toggle("dark", theme === "dark");
     root.dataset.theme = theme;
+    root.lang = isEnglish ? "en" : "zh-CN";
   } catch {}
 })();
 `;

@@ -2,7 +2,35 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import { getBlogPosts } from "@/lib/blog-posts";
+import { defaultLocale, type SupportedLocale, withLocalePath } from "@/lib/i18n";
+import { getLocalizedProject, getProjectStatusLabel } from "@/lib/localized-content";
 import { projects } from "@/lib/projects";
+
+type HomePageViewProps = {
+  locale?: SupportedLocale;
+};
+
+type HomeCopy = {
+  skipToMain: string;
+  roleLabel: string;
+  intro: string;
+  headline: string[];
+  workSelectedProjects: (count: number) => string;
+  blogLatestWritings: (count: number) => string;
+  viewAll: string;
+  caseLabel: string;
+  featured: string;
+  readArticle: string;
+  noBlog: string;
+  servicesTitle: string;
+  services: Array<{ title: string; description: string }>;
+  aboutTitle: string;
+  aboutIntro: string;
+  approach: Array<{ title: string; detail: string }>;
+  contactTitle: string;
+  contactHeadline: [string, string];
+  contactIntro: string;
+};
 
 const socialLinks = [
   { label: "GitHub", href: "https://github.com/xwtaidev" },
@@ -10,55 +38,130 @@ const socialLinks = [
   { label: "Email", href: "mailto:xwtaidev@gmail.com" },
 ];
 
-const services = [
-  {
-    title: "AI Architecture Design",
-    description:
-      "从业务目标反推模型、数据、检索与工具链路，设计可演进的 AI 系统架构。",
+const homeCopyByLocale: Record<SupportedLocale, HomeCopy> = {
+  "zh-CN": {
+    skipToMain: "跳转到主要内容",
+    roleLabel: "AI 架构工程师",
+    intro:
+      "我专注于 AI 系统架构与工程落地，把模型能力、业务流程和生产稳定性放在同一条交付链路里推进。下面是近期案例、技术文章与可协作方向。",
+    headline: ["架构并交付", "可落地的 AI 系统", "让能力稳定", "进入真实业务。"],
+    workSelectedProjects: (count) => `${count} 个精选项目`,
+    blogLatestWritings: (count) => `${count} 篇最新文章`,
+    viewAll: "查看全部 →",
+    caseLabel: "案例",
+    featured: "精选",
+    readArticle: "阅读该文章",
+    noBlog: "暂无博客内容。",
+    servicesTitle: "服务方向",
+    services: [
+      {
+        title: "AI 架构设计",
+        description: "从业务目标反推模型、数据、检索与工具链路，设计可演进的 AI 系统架构。",
+      },
+      {
+        title: "LLM 与 Agent 工程",
+        description: "围绕 Agent、RAG、提示策略与工作流编排，构建可上线的智能能力闭环。",
+      },
+      {
+        title: "可靠性与安全",
+        description: "补齐权限、Secrets、限流、观测与回滚机制，降低 AI 系统在生产环境的风险。",
+      },
+      {
+        title: "AI 交付流水线",
+        description: "建立评测基线、发布流程和反馈回路，让 AI 能力从 PoC 稳定走向持续迭代。",
+      },
+    ],
+    aboutTitle: "关于我",
+    aboutIntro:
+      "我关注 AI 应用中的核心系统路径，擅长把模糊需求转成可验证的架构与工程方案。目标是在更短周期内交付更稳定、可观测、可持续演进的 AI 能力。",
+    approach: [
+      {
+        title: "Architect",
+        detail: "先定义系统边界、关键路径和技术取舍，确保方案可落地、可维护。",
+      },
+      {
+        title: "Validate",
+        detail: "通过离线评测与灰度验证关键假设，减少模型与流程上线的不确定性。",
+      },
+      {
+        title: "Operate",
+        detail: "把有效实践沉淀为 runbook、告警与 SOP，支撑团队规模化运行。",
+      },
+    ],
+    contactTitle: "联系",
+    contactHeadline: ["一起搭建", "清晰可持续的系统。"],
+    contactIntro:
+      "如果你正在搭建 Agent / RAG 系统，或希望重构现有 AI 架构与发布流程，欢迎联系我。我们可以从一次聚焦目标、约束与优先级的技术讨论开始。",
   },
-  {
-    title: "LLM & Agent Engineering",
-    description:
-      "围绕 Agent、RAG、提示策略与工作流编排，构建可上线的智能能力闭环。",
+  en: {
+    skipToMain: "Skip to main content",
+    roleLabel: "AI Architect Engineer",
+    intro:
+      "I focus on AI system architecture and production delivery, aligning model capability, business workflow, and operational reliability into one execution path.",
+    headline: ["Architecting and shipping", "AI systems", "for reliable", "real-world delivery."],
+    workSelectedProjects: (count) => `${count} selected projects`,
+    blogLatestWritings: (count) => `${count} latest writings`,
+    viewAll: "View all →",
+    caseLabel: "Case",
+    featured: "Featured",
+    readArticle: "Read article",
+    noBlog: "No blog posts yet.",
+    servicesTitle: "Services",
+    services: [
+      {
+        title: "AI Architecture Design",
+        description:
+          "Design evolvable AI systems by mapping business goals to models, data, retrieval, and tool orchestration.",
+      },
+      {
+        title: "LLM & Agent Engineering",
+        description:
+          "Build production-grade Agent and RAG workflows with prompt strategy and workflow orchestration.",
+      },
+      {
+        title: "Reliability & Security",
+        description:
+          "Add guardrails for permissions, secrets, rate limits, observability, and rollback to reduce production risk.",
+      },
+      {
+        title: "AI Delivery Pipeline",
+        description:
+          "Establish evaluation baselines, release flow, and feedback loops so AI capability can iterate continuously.",
+      },
+    ],
+    aboutTitle: "About",
+    aboutIntro:
+      "I focus on core system paths in AI products and turn ambiguous requirements into verifiable architecture and engineering plans.",
+    approach: [
+      {
+        title: "Architect",
+        detail: "Define system boundaries, critical paths, and tradeoffs first so the solution is buildable and maintainable.",
+      },
+      {
+        title: "Validate",
+        detail: "Use offline evaluation and staged rollout to validate key assumptions before broad release.",
+      },
+      {
+        title: "Operate",
+        detail: "Convert effective practices into runbooks, alerts, and SOPs for reliable team-scale operations.",
+      },
+    ],
+    contactTitle: "Contact",
+    contactHeadline: ["LET'S BUILD", "SOMETHING CLEAR."],
+    contactIntro:
+      "If you're building an Agent or RAG system, or refactoring an existing AI architecture and release flow, let's talk.",
   },
-  {
-    title: "Reliability & Security",
-    description:
-      "补齐权限、Secrets、限流、观测与回滚机制，降低 AI 系统在生产环境的风险。",
-  },
-  {
-    title: "AI Delivery Pipeline",
-    description:
-      "建立评测基线、发布流程和反馈回路，让 AI 能力从 PoC 稳定走向持续迭代。",
-  },
-];
+};
 
-const approach = [
-  {
-    title: "Architect",
-    detail: "先定义系统边界、关键路径和技术取舍，确保方案可落地、可维护。",
-  },
-  {
-    title: "Validate",
-    detail: "通过离线评测与灰度验证关键假设，减少模型与流程上线的不确定性。",
-  },
-  {
-    title: "Operate",
-    detail: "把有效实践沉淀为 runbook、告警与 SOP，支撑团队规模化运行。",
-  },
-];
-
-const headline = [
-  "Architecting and shipping",
-  "AI systems",
-  "for reliable",
-  "real-world delivery.",
-];
-
-export default function Home() {
+export function HomePageView({ locale = defaultLocale }: HomePageViewProps) {
+  const copy = homeCopyByLocale[locale];
   const blogPosts = getBlogPosts();
   const featuredBlogPost = blogPosts[0];
   const sideBlogPosts = blogPosts.slice(1, 4);
+  const localizedProjects = projects.map((project) => getLocalizedProject(project, locale));
+  const homeProjects = localizedProjects.slice(0, 4);
+  const featuredProject = homeProjects[0];
+  const secondaryProjects = homeProjects.slice(1);
   const getSideExcerpt = (excerpt: string) => (excerpt.length > 52 ? `${excerpt.slice(0, 52).trimEnd()}...` : excerpt);
 
   return (
@@ -67,7 +170,7 @@ export default function Home() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-zinc-900 focus:px-3 focus:py-2 focus:text-sm focus:text-white dark:focus:bg-zinc-100 dark:focus:text-zinc-950"
       >
-        Skip to main content
+        {copy.skipToMain}
       </a>
 
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
@@ -75,13 +178,13 @@ export default function Home() {
         <div className="hero-glow hero-glow-bottom" />
       </div>
 
-      <SiteHeader />
+      <SiteHeader locale={locale} />
 
-      <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+      <main id="main-content" className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
-          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">AI Architect Engineer</p>
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">{copy.roleLabel}</p>
           <div className="mt-5 space-y-1 text-zinc-950 dark:text-zinc-100">
-            {headline.map((line) => (
+            {copy.headline.map((line) => (
               <h1
                 key={line}
                 className="font-display text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl"
@@ -91,9 +194,7 @@ export default function Home() {
             ))}
           </div>
 
-          <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            我专注于 AI 系统架构与工程落地，把模型能力、业务流程和生产稳定性放在同一条交付链路里推进。下面是近期案例、技术文章与可协作方向。
-          </p>
+          <p className="mt-8 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">{copy.intro}</p>
 
           <div className="mt-8 flex flex-wrap gap-2">
             {socialLinks.map((link) => (
@@ -114,56 +215,93 @@ export default function Home() {
           <div className="flex flex-wrap items-end justify-between gap-3">
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
             <div className="flex items-center gap-3">
-              <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{projects.length} selected projects</span>
+              <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
+                {copy.workSelectedProjects(homeProjects.length)}
+              </span>
               <Link
-                href="/work"
+                href={withLocalePath(locale, "/work")}
                 className="text-xs tracking-[0.14em] uppercase text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
               >
-                View all →
+                {copy.viewAll}
               </Link>
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {projects.map((project, index) => (
-              <article key={project.slug} className={index === 0 ? "md:col-span-2" : ""}>
-                <Link href={`/projects/${project.slug}`} className="group block">
+          <div className="mt-8 space-y-6">
+            {featuredProject ? (
+              <article>
+                <Link href={withLocalePath(locale, `/projects/${featuredProject.slug}`)} className="group block">
                   <div
-                    className={`relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 ${
-                      index === 0 ? "aspect-[16/8]" : "aspect-[4/3]"
-                    } dark:border-zinc-800`}
+                    className="relative aspect-[16/8] overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 dark:border-zinc-800"
                   >
                     <Image
-                      src={project.coverImage}
-                      alt={project.title}
+                      src={featuredProject.coverImage}
+                      alt={featuredProject.title}
                       fill
-                      priority={index === 0}
-                      sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                      priority
+                      sizes="(min-width: 1280px) 1200px, (min-width: 768px) 92vw, 100vw"
                       className={`h-full w-full opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                        project.imageFit === "contain"
+                        featuredProject.imageFit === "contain"
                           ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
                           : "object-cover group-hover:scale-[1.03]"
                       }`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
                     <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
-                      {project.status}
+                      {getProjectStatusLabel(featuredProject.status, locale)}
                     </div>
                     <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
                       <div>
-                        <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
+                        <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{featuredProject.category}</p>
                         <h3 className="font-display mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                          {project.title}
+                          {featuredProject.title}
                         </h3>
                       </div>
-                      <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">Case</span>
+                      <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">{copy.caseLabel}</span>
                     </div>
                   </div>
                 </Link>
 
-                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
+                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{featuredProject.summary}</p>
               </article>
-            ))}
+            ) : null}
+
+            {secondaryProjects.length ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {secondaryProjects.map((project) => (
+                  <article key={project.slug}>
+                    <Link href={withLocalePath(locale, `/projects/${project.slug}`)} className="group block">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 dark:border-zinc-800">
+                        <Image
+                          src={project.coverImage}
+                          alt={project.title}
+                          fill
+                          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 48vw, 100vw"
+                          className={`h-full w-full opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            project.imageFit === "contain"
+                              ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
+                              : "object-cover group-hover:scale-[1.03]"
+                          }`}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+                        <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                          {getProjectStatusLabel(project.status, locale)}
+                        </div>
+                        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+                          <div>
+                            <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
+                            <h3 className="font-display mt-1 text-2xl font-semibold tracking-tight text-white">{project.title}</h3>
+                          </div>
+                          <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">{copy.caseLabel}</span>
+                        </div>
+                      </div>
+                    </Link>
+
+                    <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
+                  </article>
+                ))}
+              </div>
+            ) : null}
           </div>
         </section>
 
@@ -172,13 +310,13 @@ export default function Home() {
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Blog.</h2>
             <div className="flex items-center gap-3">
               <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
-                {blogPosts.length} latest writings
+                {copy.blogLatestWritings(blogPosts.length)}
               </span>
               <Link
-                href="/blog"
+                href={withLocalePath(locale, "/blog")}
                 className="text-xs tracking-[0.14em] uppercase text-zinc-700 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
               >
-                View all →
+                {copy.viewAll}
               </Link>
             </div>
           </div>
@@ -196,7 +334,7 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
                   <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
-                    Featured
+                    {copy.featured}
                   </div>
                 </div>
 
@@ -210,26 +348,24 @@ export default function Home() {
                   </div>
                   <h3 className="font-display mt-4 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-100">
                     <Link
-                      href={`/blog/${featuredBlogPost.slug}`}
+                      href={withLocalePath(locale, `/blog/${featuredBlogPost.slug}`)}
                       className="transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-zinc-600 dark:hover:text-zinc-300"
                     >
                       {featuredBlogPost.title}
                     </Link>
                   </h3>
-                  <p className="mt-4 max-w-[64ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-                    {featuredBlogPost.excerpt}
-                  </p>
+                  <p className="mt-4 max-w-[64ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">{featuredBlogPost.excerpt}</p>
                   <Link
-                    href={`/blog/${featuredBlogPost.slug}`}
+                    href={withLocalePath(locale, `/blog/${featuredBlogPost.slug}`)}
                     className="mt-6 inline-flex w-fit rounded-full border border-zinc-300 px-3 py-1.5 text-xs text-zinc-700 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:border-zinc-500 hover:text-zinc-950 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-zinc-100 lg:mt-auto"
                   >
-                    阅读该文章
+                    {copy.readArticle}
                   </Link>
                 </div>
               </article>
             ) : (
               <article className="rounded-2xl border border-zinc-200 bg-white/80 p-6 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-300 lg:h-full">
-                暂无博客内容。
+                {copy.noBlog}
               </article>
             )}
 
@@ -259,7 +395,7 @@ export default function Home() {
                       </div>
                       <h3 className="font-display mt-2 text-lg leading-tight font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={withLocalePath(locale, `/blog/${post.slug}`)}
                           className="transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
                         >
                           {post.title}
@@ -275,9 +411,9 @@ export default function Home() {
         </section>
 
         <section id="services" className="mt-20 fade-up">
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Services.</h2>
+          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{copy.servicesTitle}</h2>
           <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-            {services.map((service, index) => (
+            {copy.services.map((service, index) => (
               <article
                 key={service.title}
                 className="rounded-2xl border border-zinc-200 bg-white/80 p-6 transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900/70 dark:hover:border-zinc-600"
@@ -293,13 +429,11 @@ export default function Home() {
         <section id="about" className="mt-20 fade-up">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.35fr_1fr]">
             <div>
-              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">About.</h2>
-              <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 dark:text-zinc-300 sm:text-2xl sm:leading-10">
-                我关注 AI 应用中的核心系统路径，擅长把模糊需求转成可验证的架构与工程方案。目标是在更短周期内交付更稳定、可观测、可持续演进的 AI 能力。
-              </p>
+              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{copy.aboutTitle}</h2>
+              <p className="mt-6 max-w-[60ch] text-xl leading-9 text-zinc-700 dark:text-zinc-300 sm:text-2xl sm:leading-10">{copy.aboutIntro}</p>
             </div>
             <div className="space-y-4">
-              {approach.map((item, index) => (
+              {copy.approach.map((item, index) => (
                 <article key={item.title} className="rounded-2xl border border-zinc-200 bg-white/70 p-5 dark:border-zinc-800 dark:bg-zinc-900/60">
                   <p className="text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">{String(index + 1).padStart(2, "0")}</p>
                   <h3 className="font-display mt-2 text-lg font-semibold tracking-tight text-zinc-950 dark:text-zinc-100">{item.title}</h3>
@@ -311,15 +445,13 @@ export default function Home() {
         </section>
 
         <section id="contact" className="mt-20 border-t border-zinc-200 pt-12 fade-up dark:border-zinc-800">
-          <p className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">Contact.</p>
+          <p className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">{copy.contactTitle}</p>
           <h2 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight text-zinc-950 dark:text-zinc-100 sm:text-6xl lg:text-7xl">
-            LET&apos;S BUILD
+            {copy.contactHeadline[0]}
             <br />
-            SOMETHING CLEAR.
+            {copy.contactHeadline[1]}
           </h2>
-          <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">
-            如果你正在搭建 Agent / RAG 系统，或希望重构现有 AI 架构与发布流程，欢迎联系我。我们可以从一次聚焦目标、约束与优先级的技术讨论开始。
-          </p>
+          <p className="mt-6 max-w-[56ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">{copy.contactIntro}</p>
           <div className="mt-8 flex flex-wrap gap-2">
             <a
               href="mailto:xwtaidev@gmail.com"
@@ -352,4 +484,8 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export default function Home() {
+  return <HomePageView locale={defaultLocale} />;
 }
