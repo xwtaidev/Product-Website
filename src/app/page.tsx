@@ -159,6 +159,9 @@ export function HomePageView({ locale = defaultLocale }: HomePageViewProps) {
   const featuredBlogPost = blogPosts[0];
   const sideBlogPosts = blogPosts.slice(1, 4);
   const localizedProjects = projects.map((project) => getLocalizedProject(project, locale));
+  const homeProjects = localizedProjects.slice(0, 4);
+  const featuredProject = homeProjects[0];
+  const secondaryProjects = homeProjects.slice(1);
   const getSideExcerpt = (excerpt: string) => (excerpt.length > 52 ? `${excerpt.slice(0, 52).trimEnd()}...` : excerpt);
 
   return (
@@ -213,7 +216,7 @@ export function HomePageView({ locale = defaultLocale }: HomePageViewProps) {
             <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Work.</h2>
             <div className="flex items-center gap-3">
               <span className="text-xs tracking-[0.14em] uppercase text-zinc-500 dark:text-zinc-400">
-                {copy.workSelectedProjects(localizedProjects.length)}
+                {copy.workSelectedProjects(homeProjects.length)}
               </span>
               <Link
                 href={withLocalePath(locale, "/work")}
@@ -224,36 +227,34 @@ export function HomePageView({ locale = defaultLocale }: HomePageViewProps) {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {localizedProjects.map((project, index) => (
-              <article key={project.slug} className={index === 0 ? "md:col-span-2" : ""}>
-                <Link href={withLocalePath(locale, `/projects/${project.slug}`)} className="group block">
+          <div className="mt-8 space-y-6">
+            {featuredProject ? (
+              <article>
+                <Link href={withLocalePath(locale, `/projects/${featuredProject.slug}`)} className="group block">
                   <div
-                    className={`relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 ${
-                      index === 0 ? "aspect-[16/8]" : "aspect-[4/3]"
-                    } dark:border-zinc-800`}
+                    className="relative aspect-[16/8] overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 dark:border-zinc-800"
                   >
                     <Image
-                      src={project.coverImage}
-                      alt={project.title}
+                      src={featuredProject.coverImage}
+                      alt={featuredProject.title}
                       fill
-                      priority={index === 0}
-                      sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                      priority
+                      sizes="(min-width: 1280px) 1200px, (min-width: 768px) 92vw, 100vw"
                       className={`h-full w-full opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                        project.imageFit === "contain"
+                        featuredProject.imageFit === "contain"
                           ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
                           : "object-cover group-hover:scale-[1.03]"
                       }`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
                     <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
-                      {getProjectStatusLabel(project.status, locale)}
+                      {getProjectStatusLabel(featuredProject.status, locale)}
                     </div>
                     <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
                       <div>
-                        <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
+                        <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{featuredProject.category}</p>
                         <h3 className="font-display mt-1 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                          {project.title}
+                          {featuredProject.title}
                         </h3>
                       </div>
                       <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">{copy.caseLabel}</span>
@@ -261,9 +262,46 @@ export function HomePageView({ locale = defaultLocale }: HomePageViewProps) {
                   </div>
                 </Link>
 
-                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
+                <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{featuredProject.summary}</p>
               </article>
-            ))}
+            ) : null}
+
+            {secondaryProjects.length ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {secondaryProjects.map((project) => (
+                  <article key={project.slug}>
+                    <Link href={withLocalePath(locale, `/projects/${project.slug}`)} className="group block">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-900 dark:border-zinc-800">
+                        <Image
+                          src={project.coverImage}
+                          alt={project.title}
+                          fill
+                          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 48vw, 100vw"
+                          className={`h-full w-full opacity-92 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            project.imageFit === "contain"
+                              ? "object-contain bg-zinc-950 p-2 group-hover:scale-[1.01]"
+                              : "object-cover group-hover:scale-[1.03]"
+                          }`}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+                        <div className="absolute left-4 top-4 inline-flex rounded-full border border-white/35 bg-black/20 px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase text-white">
+                          {getProjectStatusLabel(project.status, locale)}
+                        </div>
+                        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
+                          <div>
+                            <p className="text-xs tracking-[0.1em] uppercase text-zinc-100/80">{project.category}</p>
+                            <h3 className="font-display mt-1 text-2xl font-semibold tracking-tight text-white">{project.title}</h3>
+                          </div>
+                          <span className="text-xs tracking-[0.08em] uppercase text-zinc-100">{copy.caseLabel}</span>
+                        </div>
+                      </div>
+                    </Link>
+
+                    <p className="mt-4 max-w-[62ch] text-sm leading-7 text-zinc-600 dark:text-zinc-300">{project.summary}</p>
+                  </article>
+                ))}
+              </div>
+            ) : null}
           </div>
         </section>
 
