@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import WorkJobsBoard, { type WorkJobsCopy } from "@/components/work-jobs-board";
-import { defaultLocale, type SupportedLocale } from "@/lib/i18n";
+import { defaultLocale, type SupportedLocale, withLocalePath } from "@/lib/i18n";
 import { getLocalizedProject } from "@/lib/localized-content";
 import { projects } from "@/lib/projects";
 
@@ -12,6 +13,10 @@ type WorkPageViewProps = {
 type WorkCopy = {
   title: string;
   description: string;
+  backHome: string;
+  listLabel: string;
+  headline: [string, string];
+  intro: string;
   board: WorkJobsCopy;
   projectStats: (all: number, launched: number) => [string, string, string];
 };
@@ -20,6 +25,11 @@ const workCopyByLocale: Record<SupportedLocale, WorkCopy> = {
   "zh-CN": {
     title: "作品",
     description: "作品页：参考 jobs board 交互结构，使用三栏工作台展示每个项目。",
+    backHome: "← 返回首页",
+    listLabel: "作品列表",
+    headline: ["以 Jobs Board 的方式", "浏览项目与案例。"],
+    intro:
+      "每个项目都对应一个可浏览的“职位卡位”，你可以像筛选招聘信息一样快速查看，并在右侧实时预览与展开细节。",
     board: {
       pageTitle: "Work",
       pageSubtitle: "用 jobs 风格浏览项目，悬停左侧列表即可联动右侧预览并查看完整细节。",
@@ -55,6 +65,11 @@ const workCopyByLocale: Record<SupportedLocale, WorkCopy> = {
   en: {
     title: "Work",
     description: "Work page redesigned as a jobs-board workspace with a three-column layout and motion transitions.",
+    backHome: "← Back to home",
+    listLabel: "Work list",
+    headline: ["Browse Work", "In A Jobs Board Flow."],
+    intro:
+      "Each project is treated like a browsable job entry. Scan quickly, preview on the right, and open the full implementation context.",
     board: {
       pageTitle: "Work",
       pageSubtitle: "Browse projects in a jobs-style board. Hover the list and inspect each case in context.",
@@ -115,12 +130,30 @@ export function WorkPageView({ locale = defaultLocale }: WorkPageViewProps) {
       <SiteHeader locale={locale} />
 
       <main className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
-        <WorkJobsBoard
-          locale={locale}
-          copy={copy.board}
-          projects={localizedProjects}
-          stats={{ totalStat, launchedStat, inProgressStat }}
-        />
+        <section className="fade-up">
+          <Link
+            href={withLocalePath(locale, "/")}
+            className="inline-flex text-xs tracking-[0.12em] uppercase text-zinc-600 transition hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            {copy.backHome}
+          </Link>
+          <p className="mt-4 text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">{copy.listLabel}</p>
+          <h1 className="font-display mt-4 text-4xl leading-none font-semibold tracking-tight sm:text-6xl lg:text-7xl">
+            {copy.headline[0]}
+            <br />
+            {copy.headline[1]}
+          </h1>
+          <p className="mt-7 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">{copy.intro}</p>
+        </section>
+
+        <div className="mt-12">
+          <WorkJobsBoard
+            locale={locale}
+            copy={copy.board}
+            projects={localizedProjects}
+            stats={{ totalStat, launchedStat, inProgressStat }}
+          />
+        </div>
       </main>
 
       <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">

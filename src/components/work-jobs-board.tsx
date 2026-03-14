@@ -455,30 +455,6 @@ export default function WorkJobsBoard({ locale, copy, stats, projects }: WorkJob
 
   return (
     <section className="fade-up work-jobs-shell">
-      <header className="work-jobs-page-header">
-        <h1 className="work-jobs-page-title font-display">{copy.pageTitle}</h1>
-        <p className="work-jobs-page-subtitle">{copy.pageSubtitle}</p>
-      </header>
-
-      <div className="work-jobs-meta">
-        <div className="flex items-center gap-3">
-          <Link
-            href={withLocalePath(locale, "/")}
-            className="text-xs tracking-[0.12em] uppercase text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-          >
-            {copy.backHome}
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-700">/</span>
-          <span className="text-xs tracking-[0.12em] uppercase text-zinc-500 dark:text-zinc-400">{copy.boardTag}</span>
-        </div>
-        <Link
-          href={withLocalePath(locale, "/blog")}
-          className="text-xs tracking-[0.12em] uppercase text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-        >
-          {copy.readWritings}
-        </Link>
-      </div>
-
       <div className="work-jobs-stats">
         <span>{stats.totalStat}</span>
         <span>{stats.launchedStat}</span>
