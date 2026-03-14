@@ -129,7 +129,7 @@ export function WorkPageView({ locale = defaultLocale }: WorkPageViewProps) {
 
       <SiteHeader locale={locale} />
 
-      <main className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+      <main className="mx-auto w-full max-w-[1400px] px-4 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
           <Link
             href={withLocalePath(locale, "/")}
@@ -146,15 +146,16 @@ export function WorkPageView({ locale = defaultLocale }: WorkPageViewProps) {
           <p className="mt-7 max-w-[68ch] text-base leading-8 text-zinc-600 dark:text-zinc-300">{copy.intro}</p>
         </section>
 
-        <div className="mt-12">
-          <WorkJobsBoard
-            locale={locale}
-            copy={copy.board}
-            projects={localizedProjects}
-            stats={{ totalStat, launchedStat, inProgressStat }}
-          />
-        </div>
       </main>
+
+      <section className="mx-auto mt-12 w-full max-w-[1400px] px-4 pb-20 sm:px-6 lg:px-8">
+        <WorkJobsBoard
+          locale={locale}
+          copy={copy.board}
+          projects={localizedProjects}
+          stats={{ totalStat, launchedStat, inProgressStat }}
+        />
+      </section>
 
       <footer className="border-t border-zinc-200 py-6 text-center text-xs tracking-[0.08em] uppercase text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
         © {new Date().getFullYear()} Wayne Xu

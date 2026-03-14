@@ -177,7 +177,7 @@ export function HomePageView({ locale = defaultLocale }: HomePageViewProps) {
 
       <SiteHeader locale={locale} />
 
-      <main id="main-content" className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+      <main id="main-content" className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
           <p className="text-xs tracking-[0.14em] uppercase text-zinc-600 dark:text-zinc-400">{copy.roleLabel}</p>
           <div className="mt-5 space-y-1 text-zinc-950 dark:text-zinc-100">

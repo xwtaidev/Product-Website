@@ -999,7 +999,7 @@ export async function BlogDetailPageView({ slug, locale = defaultLocale }: BlogD
 
       <SiteHeader locale={locale} />
 
-      <main className="mx-auto w-full max-w-[82rem] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+      <main className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <Link
           href={withLocalePath(locale, "/blog")}
           className="text-xs tracking-[0.12em] uppercase text-zinc-600 transition hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"

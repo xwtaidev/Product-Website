@@ -66,7 +66,7 @@ export function BlogPageView({ locale = defaultLocale }: BlogPageViewProps) {
 
       <SiteHeader locale={locale} />
 
-      <main className="mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
+      <main className="mx-auto w-full max-w-[1400px] px-4 pb-20 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-18">
         <section className="fade-up">
           <Link
             href={withLocalePath(locale, "/")}
